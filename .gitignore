@@ -9,3 +9,6 @@ package-lock.json
 .well-known
 .well-known/*
 /phpmyadmin
+public/apk/app-release.apk
+public/apk/serviceAccountKey.json
+credentials.json
