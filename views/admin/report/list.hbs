@@ -1,0 +1,73 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+         <div class="report_management_page common_table">
+            
+            <table id="report-management" class="display table cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Reported by</th>
+                        <th>Report for</th>
+                        <th>Unblock?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each reportList}}
+                    <tr>
+                        <td>{{report_by_name}}</td>
+                        <td>{{report_for_name}}</td>
+                        <td>
+                            <label class="radio" for="radio__toggle4">
+                               {{#ifCondition status '==' 1}}
+                                        <input class="radio__toggle status_toggle_btn" data-id="{{id}}" type="checkbox" checked>
+                                {{else}}
+                                    <input class="radio__toggle status_toggle_btn" data-id="{{id}}" type="checkbox">
+                                {{/ifCondition}}
+                             
+                              </label>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>        
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+   
+    $(document).on('click', '.status_toggle_btn', function(){
+        var reportId = $(this).attr('data-id');
+        if ($(this).prop('checked')) {
+            var status = 1;
+        } else {
+           var status = 0;
+        }
+        $.ajax({
+            url: '/admin/report-management/report-status-action',
+            method: 'POST',
+            data: {
+              reportId:reportId,
+              status:status,
+            },
+            success: function(response) {
+              if(response.status == 'success'){
+                    toastr.success(response.message);
+                    setTimeout(function () {
+                        location.reload(true);
+                    }, 2000);
+              }else{
+                    toastr.error(response.message);
+              }  
+             
+            },
+            error: function() {
+              toastr.error('Something went wrong.');
+            }
+        });
+    });
+  
+</script>

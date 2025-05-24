@@ -1,0 +1,624 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('express:server');
+var http = require('http');
+require('dotenv').config();
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '8080');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+
+// socket io code
+const socketIO = require('socket.io');
+const io = socketIO(server);
+const moment = require('moment-timezone');
+const chatController = require("../controller/ChatController");
+const commonController = require("../controller/CommonController");
+var chatModel = require("../models/Chat");
+var userModel = require("../models/User");
+var activityLog = require("../models/ActivityLog");
+var nickNameModel = require("../models/NickName");
+var notificationModel = require("../models/Notification");
+var leaveModel = require("../models/Leave");
+var activityLogModel = require("../models/ActivityLog");
+var conn = require("../config/db");
+const { NULL } = require('mysql/lib/protocol/constants/types');
+const { Console } = require('console');
+
+// Socket.IO logic for handling chat
+
+/********************************************************************************************************************/
+        //---> this comment for normal chat message list refresh and read update status
+/********************************************************************************************************************/
+
+io.on('connection', (socket) => {
+  // //console.log('User connected');
+
+  socket.on('socketPing', async (data) => {
+    //console.log('Ping socket connection');
+    io.emit('pong_'+parseInt(data.userId));
+   
+  });
+  
+  socket.on('socketConnect', async (data) => {
+    try {
+      const userData = await chatModel.findUserIdById(conn, data.userId);
+      if(userData != ''){
+        var userdetails = userData[0];
+        if(userdetails.socket_id == ''  || userdetails.socket_id == null){
+          if(userdetails.service_toggle_status != 0){
+            var socketId = socket.id;
+            const result = await chatController.socketConnect(data, socketId);
+            let joinUser = await chatModel.connectedUsers(conn, data.userId);
+            let statusData = await chatModel.getOnlineOflineStatus(conn, data.userId);
+            if(userdetails.user_type == 'listner' && userdetails.listner_status == 2 && userdetails.profile_status == 2){
+              const currentTimeIST = moment.tz('Asia/Kolkata').format('HH:mm');
+              const currentDate =  moment().format('YYYY-MM-DD');
+              var onlineTimeNoteData = {
+                listener_id:data.userId,
+                socket_id:socketId,
+                start_time:currentTimeIST,
+                date:currentDate
+              };
+              let onlineTimeNote = await leaveModel.onlineTimeNote(conn, onlineTimeNoteData);
+            }
+            io.emit('getOnlineOflineStatusResponse_'+parseInt(data.userId), statusData[0]);
+            joinUser.forEach((user) => {
+              io.emit('chatListRefresh_'+parseInt(user.connected_user));
+              //io.emit('getOnlineOflineStatusResponse_'+parseInt(user.connected_user), statusData[0]);
+            });
+           
+            let notifyNotificationUsers = await notificationModel.getNotifyUser(conn, data.userId);
+            notifyNotificationUsers.forEach(async (notifyUser) => {
+              var nickName = await nickNameModel.filterNameFind(conn, notifyUser.opponent_id, data.userId);
+              // notification code
+              var storeNotificationData = {
+                  user_id:notifyUser.opponent_id,
+                  name:nickName[0].full_name,
+                  screen_type:'log',
+                  message: nickName[0].full_name+' is now online',
+                  opponent_id: data.userId,
+                  read_status: 0
+              };
+              let storeNotification = await notificationModel.insert(conn, storeNotificationData);
+            });
+            var notificationData = {
+                'online_notify': 0,
+            };
+            let notifyUpdate = await notificationModel.updateNotify(conn, data.userId, notificationData);
+          }
+        }
+      }
+    } catch (error) {
+      // Handle errors or emit an error event back to the client
+      socket.emit('socketConnectError', { error: 'An error occurred' });
+    }
+  });
+  
+  socket.on('chatList', async (data) => {
+    try {
+      var socketId = socket.id;
+      var result = await chatController.getChatList(data, socketId);
+      var resultArray = {
+        chatList: result,
+        chat_list_type: data.chatListType,
+      };
+      socket.emit('chatListResponse', resultArray);
+    } catch (error) {
+      // Handle errors or emit an error event back to the client
+      socket.emit('chatListError', { error: 'An error occurred' });
+    }
+  });
+
+  socket.on('getChatMessage', async (data) => {
+    try {
+      const result = await chatController.getChatMessage(data);
+      result.forEach((obj) => {
+        obj._id = obj.message_id;
+        obj.text =  obj.message;
+        obj.createdAt = obj.time;
+        obj.reaction = 'like/dislike';
+        obj.reactionStatus = null;
+        
+  
+        const myObject = {
+          '_id': obj.from_user_id,
+          'name': obj.from_user_name,
+          'avatar': obj.from_user_profile_photo
+        };
+        obj.user = myObject;
+      });
+      socket.emit('getChatMessageResponse', result);
+    } catch (error) {
+      // Handle errors or emit an error event back to the client
+      socket.emit('getChatMessageError', { error: 'An error occurred' });
+    }
+  });
+
+  socket.on('readStatusUpdate', async (data) => {
+    try {
+      const result = await chatController.readStatusUpdate(data);
+      io.emit('chatListRefresh_'+parseInt(data.fromId));
+      io.emit('chatListRefresh_'+parseInt(data.toId));
+    } catch (error) {
+      // Handle errors or emit an error event back to the client
+      socket.emit('readStatusUpdateError', { error: 'An error occurred' });
+    }
+  });
+
+  socket.on('sendChatMessage', async (data) => {
+    try {
+      data.date = new moment().format("Y-MM-D");
+      data.time = new Date();
+      data.ip = socket.request.connection.remoteAddress;
+      const result = await chatController.sendChatMessage(data);
+      result._id = result.message_id;
+      result.text =  result.message;
+      result.createdAt = result.time;
+      result.reaction = 'like/dislike';
+      result.reactionStatus = null;
+      
+
+      const myObject = {
+        '_id': result.from_user_id,
+        'name': result.from_user_name,
+        'avatar': result.from_user_profile_photo
+      };
+      result.user = myObject;
+
+      io.to(result.to_socket_id).emit('sendChatMessageResponse', result);
+      io.to(result.from_socket_id).emit('sendChatMessageResponse', result);
+
+      io.emit('sendChatMessageResponse_'+parseInt(data.fromId), result);
+      io.emit('sendChatMessageResponse_'+parseInt(data.toId), result);
+       //--->io.emit('chatListRefresh_'+parseInt(data.fromId));
+       //--->io.emit('chatListRefresh_'+parseInt(data.toId));
+    } catch (error) {
+      // Handle errors or emit an error event back to the client
+      socket.emit('sendChatMessageError', { error: 'An error occurred' });
+    }
+  });
+
+  socket.on('sendServiceRequest', async (data) => {
+    try {
+      var checkReq = await activityLogModel.checkExistRequest(conn, data.fromId, data.toId);
+      if(checkReq == 0){
+        const result = await chatController.sendServiceRequest(data);
+        if(result.returnError == 1){
+          io.emit('sendServiceRequestResponse_'+parseInt(data.fromId), result.returnFromUserData);
+        }else{
+          const pushNotification = await commonController.pushNotificationSent(data);
+          io.emit('chatListRefresh_'+parseInt(data.fromId));
+          io.emit('chatListRefresh_'+parseInt(data.toId));
+          io.emit('sendServiceRequestResponse_'+parseInt(data.fromId), result.returnFromUserData);
+    
+          let fromStatusData = await chatModel.getOnlineOflineStatus(conn, data.fromId);
+          let toStatusData = await chatModel.getOnlineOflineStatus(conn, data.toId);
+          io.emit('getOnlineOflineStatusResponse_'+parseInt(data.fromId), fromStatusData[0]);
+          io.emit('getOnlineOflineStatusResponse_'+parseInt(data.toId), toStatusData[0]);
+    
+          let joinUser = await chatModel.connectedUsers(conn, data.fromId);
+          joinUser.forEach((user) => {
+            io.emit('chatListRefresh_'+parseInt(user.connected_user));
+          });
+    
+          let joinUserOther = await chatModel.connectedUsers(conn, data.toId);
+          joinUserOther.forEach((otherUser) => {
+            io.emit('chatListRefresh_'+parseInt(otherUser.connected_user));
+          });
+          
+          if(result.returnToUserData.request_status != 'cancelled'){
+            io.emit('sendServiceRequestResponse_'+parseInt(data.toId), result.returnToUserData);
+          }
+        }
+      }
+    } catch (error) {
+      // Handle errors or emit an error event back to the client
+      socket.emit('sendServiceRequestError', { error: 'An error occurred' });
+    }
+  });
+
+  socket.on('actionServiceRequest', async (data) => {
+    try {
+      if(data.requestStatus == 'completed'){
+        var activityinfo = await activityLog.getServiceRequest(conn, data.requestId);
+        if(activityinfo[0].request_status == 'completed'){
+          //console.log('already completed');
+          return false; 
+        }
+      }
+      //console.log('countinue action');
+      const result = await chatController.actionServiceRequest(data);
+      io.emit('actionServiceRequestResponse_'+parseInt(data.toId), result.returnToUserData);
+      io.emit('actionServiceRequestResponse_'+parseInt(data.fromId), result.returnFromUserData);
+
+      io.emit('chatListRefresh_'+parseInt(data.fromId));
+      io.emit('chatListRefresh_'+parseInt(data.toId));
+
+      let fromStatusData = await chatModel.getOnlineOflineStatus(conn, data.fromId);
+      let toStatusData = await chatModel.getOnlineOflineStatus(conn, data.toId);
+      io.emit('getOnlineOflineStatusResponse_'+parseInt(data.fromId), fromStatusData[0]);
+      io.emit('getOnlineOflineStatusResponse_'+parseInt(data.toId), toStatusData[0]);
+
+      let joinUser = await chatModel.connectedUsers(conn, data.fromId);
+      joinUser.forEach((user) => {
+        io.emit('chatListRefresh_'+parseInt(user.connected_user));
+      });
+
+      let joinUserOther = await chatModel.connectedUsers(conn, data.toId);
+      joinUserOther.forEach((otherUser) => {
+        io.emit('chatListRefresh_'+parseInt(otherUser.connected_user));
+      });
+
+    } catch (error) {
+      // Handle errors or emit an error event back to the client
+      socket.emit('actionServiceRequestError', { error: 'An error occurred' });
+    }
+  });
+
+  socket.on('getOnlineOflineStatus', async (data) => {
+    try { 
+      const result = await chatController.getOnlineOflineStatus(data);
+      socket.emit('getOnlineOflineStatusResponse_'+parseInt(data.userId), result[0]);
+    } catch (error) {
+      // Handle errors or emit an error event back to the client
+      socket.emit('getOnlineOflineStatusError', { error: 'An error occurred' });
+    }
+  });
+
+  socket.on('updateServiceToggleInfo', async (data) => {
+    try {
+      const result = await chatController.updateServiceToggleInfo(data);
+      let statusData = await chatModel.getOnlineOflineStatus(conn, data.userId);
+      socket.broadcast.emit('getOnlineOflineStatusResponse_'+parseInt(data.userId), statusData[0]);
+    } catch (error) {
+      // Handle errors or emit an error event back to the client
+      socket.emit('readStatusUpdateError', { error: 'An error occurred' });
+    }
+  });
+
+  socket.on('getLogMessage', async (data) => {
+    try {
+      const result = await chatController.getLogMessageData(data);
+      //console.log('------- Log Message -----');
+      //console.log(result);
+      socket.emit('getLogMessageResponse', result);
+    } catch (error) {
+      // Handle errors or emit an error event back to the client
+      socket.emit('getChatMessageError', { error: 'An error occurred' });
+    }
+  });
+
+  // Listen for user disconnection
+  socket.on('disconnect', async () => {
+   // var currentTimeDate = new Date();
+    const disconnectedUserId = await chatModel.findUserIdBySocketId(conn, socket.id);
+    if(disconnectedUserId != ''){
+        var disconnectUser = disconnectedUserId[0];
+        if(disconnectUser.user_type == 'listner' && disconnectUser.listner_status == 2 && disconnectUser.profile_status == 2){
+          onlineTimenoteUpdate(socket.id, disconnectUser.id);
+        }
+        let socketData = {
+          socket_id: null,
+          online_status: 0,
+          last_seen: Date.now()
+        };
+        let updateSocket = await chatModel.updateSocket(conn, socketData, disconnectUser.id);
+        let joinUser = await chatModel.connectedUsers(conn, disconnectUser.id);
+        joinUser.forEach((user) => {
+          io.emit('chatListRefresh_'+parseInt(user.connected_user));
+        });
+        let statusData = await chatModel.getOnlineOflineStatus(conn, disconnectUser.id);
+        io.emit('getOnlineOflineStatusResponse_'+parseInt(disconnectUser.id), statusData[0]);
+        sessionClosed(disconnectUser.id, disconnectUser);
+        
+    }
+    //console.log('User disconnected');
+  });
+
+   // Listen for user disconnection
+   socket.on('disconnect_socket', async (data) => {
+    // var currentTimeDate = new Date();
+    const disconnectedUserId = await chatModel.findUserIdById(conn, data.userId);
+    
+    if(disconnectedUserId != ''){
+        var disconnectUser = disconnectedUserId[0];
+        if(disconnectUser.user_type == 'listner' && disconnectUser.listner_status == 2 && disconnectUser.profile_status == 2){
+          onlineTimenoteUpdate(socket.id, data.userId);
+        }
+        let socketData = {
+          socket_id: null,
+          online_status: 0,
+          last_seen: Date.now()
+        };
+        let updateSocket = await chatModel.updateSocket(conn, socketData, disconnectUser.id);
+        let joinUser = await chatModel.connectedUsers(conn, disconnectUser.id);
+        joinUser.forEach((user) => {
+          io.emit('chatListRefresh_'+parseInt(user.connected_user));
+        });
+        let statusData = await chatModel.getOnlineOflineStatus(conn, disconnectUser.id);
+        io.emit('getOnlineOflineStatusResponse_'+parseInt(disconnectUser.id), statusData[0]);
+        sessionClosed(disconnectUser.id, disconnectUser);
+        
+    }
+   });
+
+  socket.on('logout', async (data) => {
+    // var currentTimeDate = new Date();
+     const disconnectedUserId = await chatModel.findUserIdById(conn, data.userId);
+    
+     if(disconnectedUserId != ''){
+         var disconnectUser = disconnectedUserId[0];
+         if(disconnectUser.user_type == 'listner' && disconnectUser.listner_status == 2 && disconnectUser.profile_status == 2){
+            onlineTimenoteUpdate(socket.id, data.userId);
+         }
+         let socketData = {
+           api_token: null,
+           device_token: null,
+           socket_id: null,
+           online_status: 0,
+           last_seen: Date.now()
+         };
+         let updateSocket = await chatModel.updateSocket(conn, socketData, disconnectUser.id);
+         let joinUser = await chatModel.connectedUsers(conn, disconnectUser.id);
+         joinUser.forEach((user) => {
+           io.emit('chatListRefresh_'+parseInt(user.connected_user));
+         });
+         let statusData = await chatModel.getOnlineOflineStatus(conn, disconnectUser.id);
+         io.emit('getOnlineOflineStatusResponse_'+parseInt(disconnectUser.id), statusData[0]);
+         sessionClosed(disconnectUser.id, disconnectUser);
+         
+     }
+     //console.log('User Logout');
+   });
+
+  socket.on('sendMessageAction', async (data) => {
+    try {
+        var returnData = {
+            'message_id': data.messageId,
+            'reactionStatus': data.reactionStatus
+        } 
+        io.emit('getMessageActionResponse_'+parseInt(data.toId), returnData);
+        io.emit('getMessageActionResponse_'+parseInt(data.fromId), returnData);
+    } catch (error) {
+      // Handle errors or emit an error event back to the client
+      socket.emit('messageActionError', { error: 'An error occurred' });
+    }
+  });
+
+  socket.on('sendFreeMessage', async (data) => {
+    try {
+      const result = await chatController.sendFreeMessage(data);
+      io.emit('getFreeMessageResponse_'+parseInt(data.fromId), result.returnFromData);
+      io.emit('getFreeMessageResponse_'+parseInt(data.toId), result.returnToData);
+    } catch (error) {
+      // Handle errors or emit an error event back to the client
+      socket.emit('sendServiceRequestError', { error: 'An error occurred' });
+    }
+  });
+});
+
+async function sessionClosed(disconnectUser, disconnectUserData){
+    try {
+      var sessionStatus = {
+          'session_status':0,
+          'read_status':1
+      };
+      let updateSessionStatus =  chatModel.sessionClosedDataUpdate(conn,sessionStatus,disconnectUser);
+      let activityRequest = await activityLog.sessionClosedChange(conn,disconnectUser);
+      activityRequest.forEach(async (reqData) => {
+        var duration = null;
+        if(reqData.start_time != '' || reqData.start_time != undefined || reqData.start_time != null){
+            var currentTimeDate = new Date();
+            const startTime = new Date(reqData.start_time);
+            // Calculate the time difference in milliseconds
+            const timeDifferenceInMilliseconds = currentTimeDate - startTime;
+
+            // Convert milliseconds to minutes
+            const timeDifferenceInMinutes = timeDifferenceInMilliseconds / (1000 * 60);
+            var duration = Math.ceil(timeDifferenceInMinutes);
+        }
+        var editData = {
+          'end_time':currentTimeDate, 
+          'duration': duration,
+          'request_status': 'completed'
+        };
+        var updateData = await activityLog.editServiceRequestData(conn, reqData.id, editData);
+        if(reqData.from_id == disconnectUser){
+          var toId = reqData.to_id;
+          var fromId = reqData.from_id;
+        }else{
+          var toId = reqData.from_id;
+          var fromId = reqData.to_id;
+        }
+        var timeArray = await getTimeLog(reqData.start_time);
+        var textNewMsg = 'Call Session at '+timeArray.formattedTime+' on '+timeArray.formattedDate+' for '+duration+' minute';
+        var storeActivityData = {
+          from_id:disconnectUser,
+          to_id:toId,
+          text:textNewMsg,
+          session_type:reqData.service_type
+        };
+        let storeActivityLog = await activityLog.storeActivityLog(conn, storeActivityData);
+        let receiverData = await userModel.list(conn, toId);
+        let changeStatus = {
+          online_status: receiverData[0].socket_id == null ? 0 : 2,
+        };
+        let updateSocket = await chatModel.updateSocket(conn, changeStatus, toId);
+
+        var returnToUserData = {
+          'from_id': fromId,
+          'to_id': toId,
+          'user_id': disconnectUserData.id,
+          'full_name':disconnectUserData.full_name,
+          'profile_photo':disconnectUserData.profile_photo,
+          'service_type':reqData.service_type,
+          'request_status':'completed',
+          'request_id':reqData.id,
+        };
+        var fromUser = disconnectUserData;
+        var toUser = receiverData[0];
+        if(fromUser.user_type == 'listner' && toUser.user_type == 'user'){
+            // first two balance clear
+            returnToUserData.rating_status = 1;
+        }else if(fromUser.user_type == 'user' && toUser.user_type == 'listner'){
+            returnToUserData.rating_status = 0;
+        }else{
+          if(reqData.from_id == fromUser.id){
+              returnToUserData.rating_status = 0;
+          }else{
+              returnToUserData.rating_status = 1;
+          }
+        }
+        io.emit('actionServiceRequestResponse_'+parseInt(toId), returnToUserData);
+
+        const result = await chatController.deductCharge(reqData.id, reqData.service_type, disconnectUserData, receiverData[0], duration, reqData);
+       
+      });
+
+      var pendingData = {
+        'request_status': 'cancelled'
+      };
+      
+      let listPendingRquestUser = await activityLog.listPendingRquestUser(conn,disconnectUser);
+      let editPendingRquest = await activityLog.editPendingRquestData(conn,disconnectUser,pendingData);
+      listPendingRquestUser.forEach(async (pendingUsrData) => {
+        if(pendingUsrData.from_id == disconnectUser){
+          var toIdNew = pendingUsrData.to_id;
+          var fromIdNew = pendingUsrData.from_id;
+        }else{
+          var toIdNew = pendingUsrData.from_id;
+          var fromIdNew = pendingUsrData.to_id;
+        }
+        var returnNewToData = {
+          'from_id': fromIdNew,
+          'to_id': toIdNew,
+          'user_id': disconnectUserData.id,
+          'full_name':disconnectUserData.full_name,
+          'profile_photo':disconnectUserData.profile_photo,
+          'service_type':pendingUsrData.service_type,
+          'request_status':'cancelled',
+          'request_id':pendingUsrData.id,
+        };
+
+        io.emit('actionServiceRequestResponse_'+parseInt(toIdNew), returnNewToData);
+        let receiverNewData = await userModel.list(conn, toIdNew);
+        let changeOnlineStatus = {
+          online_status: receiverNewData[0].socket_id == null ? 0 : 2,
+        };
+        let updateSocket = await chatModel.updateSocket(conn, changeOnlineStatus, toIdNew);
+      });
+      
+    } catch (error) {
+      // Handle errors or emit an error event back to the client
+      //console.log(error);
+    }
+}
+
+async function getTimeLog(currentTimeDate){
+  // Format the time with AM/PM
+  const formattedTime = currentTimeDate.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: 'numeric', hour12: true });
+  // Get the current date
+  const day = currentTimeDate.getDate().toString().padStart(2, '0');
+  const month = (currentTimeDate.getMonth() + 1).toString().padStart(2, '0');
+  const year = currentTimeDate.getFullYear();
+  
+  // Format the date in "DD-MM-YYYY" format
+  const formattedDate = `${day}-${month}-${year}`;
+  var arrayData = {
+      'formattedTime':formattedTime,
+      'formattedDate':formattedDate
+  };
+  return arrayData;
+}
+
+async function onlineTimenoteUpdate(socketId, userId){
+  const currentTimeIST = moment.tz('Asia/Kolkata').format('HH:mm');
+  var onlineTimeNoteUpdateData = {
+    end_time:currentTimeIST,
+  };
+  let onlineTimeNote = await leaveModel.onlineTimeNoteUpdate(conn, socketId, userId, onlineTimeNoteUpdateData);
+}
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

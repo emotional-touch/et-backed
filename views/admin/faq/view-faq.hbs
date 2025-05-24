@@ -1,0 +1,75 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        
+        <div class="usermgmt_detail_page common_table">
+            <div class="user_detail_page">
+                <button class="back_btn"><a href="/admin/faq-management/list"><i class="fa fa-arrow-left"></i></a>
+                    FAQ Detail
+                </button>
+                <div class="add_user">
+                    <a href="/admin/faq-management/add" class="add_user_btn"><i class="fa fa-circle-plus"></i> </i>FAQ</a>
+                </div>
+            </div>
+            <div class="details_page">
+                
+                
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Question</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{#if faqInfo.question}}
+                                {{faqInfo.question}}
+                            {{else}}
+                                -
+                            {{/if}}
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Answer</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{#if faqInfo.answer}}
+                                {{faqInfo.answer}}
+                            {{else}}
+                                -
+                            {{/if}}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">User Type</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{#if faqInfo.user_type}}
+                                {{faqInfo.user_type}}
+                            {{else}}
+                                -
+                            {{/if}}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Category</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{#if faqInfo.category_id}}
+                                {{faqInfo.category_name}}
+                            {{else}}
+                                -
+                            {{/if}}
+                        </p>
+                    </div>
+                </div>
+            </div>     
+        </div>
+    </div>
+</div>
+{{> footer-script }}

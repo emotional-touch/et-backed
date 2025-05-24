@@ -1,0 +1,188 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="report_analysis_page common_table">
+           
+            <div class="view_review">
+                <ul class="nav nav-tabs" id="panalty-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="home" aria-selected="true">Users</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="listeners-tab" data-bs-toggle="tab" data-bs-target="#listeners" type="button" role="tab" aria-controls="profile" aria-selected="false">Listeners</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content" id="penalty-form">
+                    <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
+                        <div class="usermgmt_detail_page">
+                            {{!-- <div class="add_user">
+                                <a href="/admin/report-analysis/export/user" class="add_user_btn">Export Users</a>
+                            </div> --}}
+                            <table id="user-management" class="display table custom_cmn_table" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Sr. No</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Mobile Number</th>
+                                        <th>Form Status</th>
+                                    </tr>
+                                </thead>
+                            </table>        
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="listeners" role="tabpanel" aria-labelledby="listeners-tab">
+                        <div class="usermgmt_detail_page ">
+                            <div class="add_user">
+                                <a href="/admin/report-analysis/export/listner" class="add_user_btn"><i class="fa fa-circle-plus"></i> </i>Export Listeners</a>
+                            </div>
+                            <table id="listener-management" class="display table custom_cmn_table" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Sr. No</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Mobile Number</th>
+                                        <th>Form Status</th>
+                                    </tr>
+                                </thead>
+                            </table>        
+                        </div>
+                    </div>
+                </div>
+        </div>
+        {{> footer-script }}
+    </div>
+</div>
+<script>
+    var table = $('#user-management').DataTable({
+        dom: 'Blfrtip',
+        buttons: [{
+            extend:'excelHtml5',
+            filename: 'user',
+            exportOptions: {
+                format: {
+                    body: function (data, row, column, node) {
+                        // If exporting status column, return text representation
+                        return column === 4 ? $(node).text() : data;
+                    }
+                }
+            }
+        }],
+        responsive: true,
+        serverSide: true,
+        processing: true,
+        ajax: {
+            url: '/admin/users-management/get-user-list',
+            type: 'GET',
+            data: function(d) {
+                d.page = Math.floor(d.start / d.length) + 1;
+                d.pageSize = d.length;
+                d.search = d.search || '';
+                d.dataType = 'user';
+            },
+            dataSrc: function(json) {
+                    // Update the recordsTotal and recordsFiltered values
+                    table.page.info().recordsTotal = json.recordsTotal;
+                    table.page.info().recordsFiltered = json.recordsFiltered;
+                    return json.data;
+            }
+        },
+        columns: [
+          {data: null,
+            render: function(data, type, row, meta) {
+                // Calculate the correct index based on current page and page length
+                var index = meta.row + 1 + (meta.settings._iDisplayStart / meta.settings._iDisplayLength) * meta.settings._iDisplayLength;
+                return index;
+            }
+          },
+          { data: 'full_name' },
+          { data: 'email' },
+          { data: 'phone_number' },
+          { data: 'google_docs_status' , render: function (data, type, rowData, row) {
+                    // Check if id is equal to 5
+                    if (data == 0) {
+                        return '<span class="text-warning">Pending</span>';
+                    }else if(data == 1){
+                        return '<span class="text-primary">Sent</span>';
+                    }else if(data == 2){
+                        return '<span class="text-success">Received Responce</span>';
+                    }
+           }},
+        ],
+        language: {
+            searchPlaceholder: "Search",
+            search: ""
+        },
+        paging: true,
+        pageLength: 10 
+    });
+
+      var table1 = $('#listener-management').DataTable({
+            dom: 'Blfrtip',
+            buttons: [{
+                extend:'excelHtml5',
+                filename: 'listener',
+                exportOptions: {
+                    format: {
+                        body: function (data, row, column, node) {
+                            // If exporting status column, return text representation
+                            return column === 4 ? $(node).text() : data;
+                        }
+                    }
+                }
+            }],
+            responsive: true,
+            serverSide: true,
+            processing: true,
+            ajax: {
+                url: '/admin/users-management/get-user-list',
+                type: 'GET',
+                data: function(d) {
+                    d.page = Math.floor(d.start / d.length) + 1;
+                    d.pageSize = d.length;
+                    d.search = d.search || '';
+                    d.dataType = 'listner';
+                },
+                dataSrc: function(json) {
+                        // Update the recordsTotal and recordsFiltered values
+                        table.page.info().recordsTotal = json.recordsTotal;
+                        table.page.info().recordsFiltered = json.recordsFiltered;
+                        return json.data;
+                }
+            },
+            columns: [
+            {data: null,
+                render: function(data, type, row, meta) {
+                    // Calculate the correct index based on current page and page length
+                    var index = meta.row + 1 + (meta.settings._iDisplayStart / meta.settings._iDisplayLength) * meta.settings._iDisplayLength;
+                    return index;
+                }
+            },
+            { data: 'full_name' },
+            { data: 'email' },
+            { data: 'phone_number' },
+            { data: 'google_docs_status' , render: function (data, type, rowData, row) {
+                        // Check if id is equal to 5
+                        if (data == 0) {
+                            return '<span class="text-warning">Pending</span>';
+                        }else if(data == 1){
+                            return '<span class="text-primary">Sent</span>';
+                        }else if(data == 2){
+                            return '<span class="text-success">Received Responce</span>';
+                        }
+            }},
+            ],
+            language: {
+                searchPlaceholder: "Search",
+                search: ""
+            },
+            paging: true,
+            pageLength: 10 
+      });
+</script>

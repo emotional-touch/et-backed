@@ -1,0 +1,62 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+         <div class="review_management_page common_table">
+            
+            <table id="review-management" class="display table cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Sr. No</th>
+                        <th>User’s Name</th>
+                      
+                        <th>Average Ratings</th>
+                        <th>Total Review</th>
+                        <th style="width:150px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each reviewList}}
+                    <tr>
+                        <td>{{addOne @index}}</td>
+                        <td>{{user_name}} </td>
+                        <td>
+                            <div class="reviwes">
+                                <p class="review-start">{{ratings}}</p>
+                                <div class="star">
+                                    <div class="review-count-container" data-rateyo-rating="{{ratings}}"></div>
+                                </div>
+                           </div>
+                        </td>
+                        <td>
+                            {{review_count}}
+                        </td>
+                        <td>
+                            <a href="/admin/review-management/details/{{l_id}}" class="action_btn"><i class=" fa fa-eye"></i></a>
+                            {{!-- <a href="#" class="action_btn"><i class="fa fa-pen"></i></a> --}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>        
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+    $(document).ready(function () {
+        // Initialize RateYo for each review count container
+        $('.review-count-container').each(function () {
+            var rating = parseFloat($(this).data('rateyo-rating')) || 0;
+
+            $(this).rateYo({
+                rating: rating,
+                readOnly: true,
+                starWidth: '20px', // Adjust as needed
+                // Add other RateYo options as needed
+            });
+        });
+    });
+</script>

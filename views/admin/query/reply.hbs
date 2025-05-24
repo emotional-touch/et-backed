@@ -1,0 +1,61 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="common_table">
+            <div class="user_detail_page">
+                <button class="back_btn"><i class="fa fa-arrow-left"></i>
+                    Reply
+                </button>
+            </div>
+
+            <div class="addnew_user_form">
+                <form action="/admin/query-management/save" method="POST" class="common_form" id="add-query-form">
+                    <input type="hidden" name="queryId" {{#if queryInfo }} value="{{queryInfo.id}}" {{/if}}/>
+                    <input type="hidden" name="status" value="1"/>
+                    <input type="hidden" name="query" value="{{queryInfo.query}}"/>
+                    <input type="hidden" name="submitted_by_name" value="{{queryInfo.submitted_by_name}}"/>
+                    <input type="hidden" name="u_id" value="{{queryInfo.u_id}}"/>
+                     <input type="hidden" name="email" value="{{queryInfo.email}}"/>
+                    <div class="row">
+                        <div class="col-sm-12 col-12">
+                            <div class="form-group">
+                                <p class="normal_question"> Query : {{queryInfo.query}}</p>
+                                <label for="addcategory">Add Reply</label>
+                                <textarea class="addanswer form-control" name="reply" id="reply" cols="30" rows="10" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn custom_btn">Submit</button>
+                </form>
+            </div>  
+        </div>
+        {{> footer-script }}
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#add-query-form').validate({
+            rules: {
+                reply: {
+                    required: true,
+                },
+            },
+            messages: {
+                reply: {
+                    required: 'Please enter reply.',
+                },
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    })
+
+</script>

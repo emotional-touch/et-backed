@@ -1,0 +1,86 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="common_table">
+            <div class="user_detail_page">
+                <button class="back_btn"><a href="/admin/subadmin-management/list"><i class="fa fa-arrow-left"></i></a>
+                   {{#if adminInfo }} Edit {{else}} Add {{/if}} Sub Admin
+                </button>
+            </div>
+
+            <div class="addnew_user_form">
+                <form action="/admin/subadmin-management/save" method="POST" class="common_form" id="add-admin-form" enctype='multipart/form-data' >
+                    <input type="hidden" name="adminId" {{#if adminInfo }} value="{{adminInfo.id}}" {{/if}}/>
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" aria-describedby="" placeholder="Enter Name" {{#if adminInfo }} value="{{adminInfo.name}}" {{/if}}>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="email-add">Email Address</label>
+                                <input type="text" class="form-control" id="email" name="email" aria-describedby="" placeholder="Enter Email Address" {{#if adminInfo }} value="{{adminInfo.email}}" {{/if}}>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="select-role">Select Role</label>
+                                <select name="role_id" id="select-role" class="form-control faq-cat">
+                                    {{#each roleList}}
+                                    <option {{#if adminInfo }} {{isEqual adminInfo.role_id roleList.id}} {{/if}} value="{{id}}">{{name}}</option>
+                                    {{/each}}   
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn custom_btn">Add</button>
+                </form>
+            </div>  
+        </div>
+        {{> footer-script }}
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#add-admin-form').validate({
+            rules: {
+                role_id: {
+                    required: true,
+                },
+                name: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+            },
+            messages: {
+                role_id: {
+                    required: 'Please select role.',
+                },
+                name: {
+                    required: 'Please enter name.',
+                },
+                email: {
+                    required: 'Please enter email.',
+                    email: "Please enter valid email address.",
+                },
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    })
+
+</script>

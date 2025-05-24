@@ -1,0 +1,46 @@
+<script src="/js/bootstrap.bundle.min.js" ></script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
+<script src="/js/toastr.min.js"></script>
+<script src="/js/sweetalert2.min.js"></script>
+<script src="/plugins/DataTables/datatables.js"></script>
+<script src="/js/dataTables.buttons.min.js"></script>
+<script src="/js/buttons.html5.min.js"></script>
+<script src="/js/jszip.min.js"></script>
+<script src="/js/pdfmake.min.js"></script>
+<script src="/js/vfs_fonts.js"></script>
+<script src="/js/rateyo.min.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/intlTelInput-jquery.min.js"></script>
+<script>
+    // Initialize Toastr
+    toastr.options = {
+        positionClass: 'toast-top-right'
+    };
+
+    // Display notifications from res.locals
+    {{#if messages.success}}
+        toastr.success('{{messages.success}}');
+    {{/if}}
+
+    {{#if messages.error}}
+        toastr.error('{{messages.error}}');
+    {{/if}}
+
+    {{#if messages.info}}
+        toastr.info('{{messages.info}}');
+    {{/if}}
+
+    {{#if messages.warning}}
+        toastr.warning('{{messages.warning}}');
+    {{/if}}
+
+    // -----Country Code Selection
+$("#mobile_code").intlTelInput({
+	initialCountry: "in",
+	separateDialCode: true,
+	// utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.4/js/utils.js"
+});
+
+
+</script>

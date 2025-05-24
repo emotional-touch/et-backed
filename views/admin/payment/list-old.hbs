@@ -1,0 +1,126 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }} 
+        <!-- other content --> 
+        <div class="add_user payment_mgmt">
+                <div class="common_form">
+                    <div class="chat_row">
+                        <div class="chat_col">
+                            <div class="from-group">
+                                <label for="selectuser">User</label>
+                                <select name="user" id="user" class="form-control faq-cat">
+                                    <option value="">Select User</option>
+                                    {{#each userList}}
+                                    <option value="{{id}}">{{full_name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chat_col">
+                            <div class="from-group">
+                                <label for="type">Type</label>
+                                <select name="type" id="type" class="form-control faq-cat">
+                                    <option value="">Select type</option>
+                                    <option value="credit">Credit</option>
+                                    <option value="debit">Debit</option>
+                                    <option value="withdraw">Withdraw</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="chat_col">
+                            <div class="d-flex align-items-center h-100 justify-content-md-end justify-content-start mt-sm-0">
+                                    <button type="button" class="btn add_user_btn filter"><i class="fa fa-search me-2"></i>Filter</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+         <div class="payment_management_page common_table">
+
+            {{!-- <div class="add_user">
+                <a href="#" class="add_user_btn"><i class="fa fa-money-bill"></i> </i>Manage Comission</a>
+            </div> --}}
+            
+            <table id="payment-management" class="display table cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="payment-data">
+                </tbody>
+            </table>     
+
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+
+<script>
+
+$(document).ready(function() {
+    getData();
+    $(".filter").click(function(){
+        getData();
+    });
+
+    function getData(){
+        var user = $('#user').val();
+        var type = $('#type').val();
+
+        $.ajax({
+            url: '/admin/payment-management/getdata',
+            method: 'POST',
+            data: {
+              user:user,
+              type:type,
+            },
+            success: function(response) {
+              if(response.status == 'success'){
+                    $('.cmn_table').DataTable().destroy();
+                    $('#payment-data').html(response.data);
+                    $('.cmn_table').DataTable( {
+                        responsive: true,
+                        searching: true,
+                        info: false,
+                        paginate: true,
+                        dom: 'ftp',
+                        // pagingType: 'full_numbers',
+                        // fixedHeader: true,
+                        // paging: false,
+
+
+                        // scrollCollapse: true,
+                        // scrollY: '200px',  
+                        language: {
+                            searchPlaceholder: "Search",
+                            search: ""
+                        },
+                        sorting: false,
+                        stripeClasses: []
+
+
+                    } );
+
+              }else{
+                    $('#payment-data').html('');
+                    toastr.error(response.message);
+              }  
+            },
+            error: function() {
+              toastr.error('Something went wrong.');
+            }
+        });
+    }
+
+});
+
+</script>

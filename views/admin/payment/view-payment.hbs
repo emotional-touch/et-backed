@@ -1,0 +1,121 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        
+        <div class="usermgmt_detail_page common_table">
+            <div class="user_detail_page">
+                <button class="back_btn"><a href="/admin/payment-management/list"><i class="fa fa-arrow-left"></i></a>
+                    Transaction Detail
+                </button>
+                
+            </div>
+            <div class="details_page">
+                {{#if transactionInfo.wallet_transaction_id}}
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Transaction ID</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{transactionInfo.wallet_transaction_id}}
+                        </p>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if transactionInfo.transaction_id}}
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Payment ID</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{transactionInfo.transaction_id}}
+                        </p>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if transactionInfo.paid_by_user}}
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Name</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{transactionInfo.paid_by_user}}
+                        </p>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if transactionInfo.amount}}
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Amount</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{transactionAmount}}
+                        </p>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if transactionInfo.created_at}}
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Date</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{formatTime transactionInfo.created_at "DD MMM, Y"}}
+                        </p>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if transactionInfo.transaction_status}}
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Status</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{transactionInfo.transaction_status}}
+                        </p>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if transactionInfo.transaction_type}}
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Transaction Type</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{transactionInfo.transaction_type}}
+                        </p>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if transactionInfo.charge_type}}
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Charge Type</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{transactionInfo.charge_type}}
+                        </p>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if transactionInfo.per_minute_charge}}
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Per Minute Charge</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{transactionInfo.per_minute_charge}}
+                        </p>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if transactionInfo.description}}
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Description</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{transactionInfo.description}}
+                        </p>
+                    </div>
+                </div>
+                {{/if}}
+
+            </div>     
+        </div>
+    </div>
+</div>
+{{> footer-script }}

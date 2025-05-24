@@ -1,0 +1,74 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+         <div class="topic_management_page common_table">
+            <div class="add_user">
+                <a href="/admin/topic-management/add" class="add_user_btn"><i class="fa fa-circle-plus"></i> </i>Topic</a>
+            </div>
+            <table id="topic-management" class="display table cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Topic</th>
+                        <th>Active?</th>
+                        <th style="width:150px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each topicList}}
+                    <tr>
+                        <td>{{name}}</td>
+                        <td>
+                            <label class="radio" for="radio__toggle4">
+                               {{#ifCondition status '==' 1}}
+                                        <input class="radio__toggle status_toggle_btn" data-id="{{id}}" type="checkbox" checked>
+                                {{else}}
+                                    <input class="radio__toggle status_toggle_btn" data-id="{{id}}" type="checkbox">
+                                {{/ifCondition}}
+                             
+                              </label>
+                        </td>
+                        <td> 
+                            <a href="/admin/topic-management/edit/{{id}}" class="action_btn"><i class=" fa fa-pen"></i></a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>        
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+   
+    $(document).on('click', '.status_toggle_btn', function(){
+        var topicId = $(this).attr('data-id');
+        if ($(this).prop('checked')) {
+            var status = 1;
+        } else {
+           var status = 0;
+        }
+        $.ajax({
+            url: '/admin/topic-management/topic-status-action',
+            method: 'POST',
+            data: {
+              topicId:topicId,
+              status:status,
+            },
+            success: function(response) {
+              if(response.status == 'success'){
+                    toastr.success(response.message);
+              }else{
+                    toastr.error(response.message);
+              }  
+             
+            },
+            error: function() {
+              toastr.error('Something went wrong.');
+            }
+        });
+    });
+  
+</script>

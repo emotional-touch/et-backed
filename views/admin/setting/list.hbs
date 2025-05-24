@@ -1,0 +1,56 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+         <div class="setting_page common_table">
+            <div class="add_user">
+                {{!-- <a href="/admin/setting/add" class="add_user_btn"><i class="fa fa-circle-plus"></i> </i>Setting</a> --}}
+            </div>
+            <table id="setting-management" class="display table cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Value</th>
+                        <th style="width:150px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each settingList}}
+                    <tr>
+                        <td>{{field}} 
+                            {{#ifCondition field '==' 'referral_amount'}} 
+                                <span class="text-info">(User)</span> 
+                            {{/ifCondition}}
+                            {{#ifCondition field '==' 'referral_percentage'}} 
+                                <span class="text-info">(Listener)  </span>
+                            {{/ifCondition}}
+
+                            {{#ifCondition field '==' 'listener_vacancy'}} 
+                                <span class="text-info">(0 for close vacancy, 1 for open vacancy)</span>
+                            {{/ifCondition}}
+                             {{#ifCondition field '==' 'is_force_update'}} 
+                                <span class="text-info">(0 for disabled force update, 1 for enable force update)</span>
+                            {{/ifCondition}}
+                             {{#ifCondition field '==' 'upi_option'}} 
+                                <span class="text-info">(0 for disabled upi edit option, 1 for enable upi edit option)</span>
+                            {{/ifCondition}}
+                        </td>
+                        <td>{{value}}</td>
+                        <td> 
+                            <a href="/admin/setting/edit/{{id}}" class="action_btn"><i class=" fa fa-pen"></i></a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>        
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+   
+    
+  
+</script>

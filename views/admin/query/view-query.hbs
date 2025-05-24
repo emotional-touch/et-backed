@@ -1,0 +1,46 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        
+        <div class="usermgmt_detail_page common_table">
+            <div class="user_detail_page">
+                <button class="back_btn"><a href="/admin/query-management/list"><i class="fa fa-arrow-left"></i></a>
+                    Query Detail
+                </button>
+            </div>
+            <div class="details_page">
+                
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Query</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{#if queryInfo.query}}
+                                {{queryInfo.query}}
+                            {{else}}
+                                -
+                            {{/if}}
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="aboutme_para">
+                    <h3 class="detail_sm_title">Reply</h3>
+                    <div class="detail_box">
+                        <p class="detail_data">
+                            {{#if queryInfo.reply}}
+                                {{queryInfo.reply}}
+                            {{else}}
+                                -
+                            {{/if}}
+                        </p>
+                    </div>
+                </div>
+
+            </div>     
+        </div>
+    </div>
+</div>
+{{> footer-script }}

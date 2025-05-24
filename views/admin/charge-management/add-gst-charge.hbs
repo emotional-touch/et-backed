@@ -1,0 +1,30 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="common_table">
+            <div class="user_detail_page">
+                <button class="back_btn"><i class="fa fa-arrow-left"></i>
+                   GST Charge
+                </button>
+            </div>
+
+            <div class="addnew_user_form">
+                <form action="" class="common_form">
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="gstcharge">Add GST Charge</label>
+                                <input type="text" class="form-control" id="gstcharge" aria-describedby="" placeholder="Add GST Charge">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn custom_btn">Add</button>
+                </form>
+            </div>  
+        </div>
+        {{> footer-script }}
+    </div>
+</div>  

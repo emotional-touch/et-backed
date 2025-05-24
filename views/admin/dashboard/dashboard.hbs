@@ -1,0 +1,176 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+
+        <div class="dashboard_heighlight">
+            <div class="dashboard_page_box">
+                <i class="fa fa-user"></i>
+                <div class="txt">
+                    <p class="count">{{userCount}}</p>
+                    <p class="count_name">Total Users</p>
+                </div>
+            </div>
+            <div class="dashboard_page_box">
+                <i class="fa fa-headphones-simple"></i>
+                <div class="txt">
+                    <p class="count">{{listnerCount}}</p>
+                    <p class="count_name">Total  Listeners</p>
+                </div>
+            </div>
+            {{!-- <div class="dashboard_page_box">
+                <i class="fa fa-coins"></i>
+                <div class="txt">
+                    <p class="count">0</p>
+                    <p class="count_name">Admin Commission</p>
+                </div>
+            </div> --}}
+            <div class="dashboard_page_box">
+                <i class="fa fa-indian-rupee-sign"></i>
+                <div class="txt">
+                    <p class="count">{{listnerTotalAmt}}</p>
+                    <p class="count_name">Total Listener Amount</p>
+                </div>
+            </div>
+            <div class="dashboard_page_box">
+                <i class="fa fa-user"></i>
+                <div class="txt">
+                    <p class="count">{{totalBonusIssuedAmt}}</p>
+                    <p class="count_name">Total Bonus Issued</p>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard_page common_table">
+            <div class="cmn_table_title">
+                <div class="row">
+                    <div class="col-10">
+                        <h3 class="title">Recently Registered Users</h3>
+                    </div>
+                    <div class="col-2">
+                        <a href="/admin/push-notification/sent" class="add_user_btn"><i class="fa fa-circle-plus"></i> </i>Push Notification</a>
+                    </div>
+                </div>
+               
+               
+             </div>
+            <table id="dashboard" class="display table cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th style="width: 200px"></th>
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    {{#each userList}}
+                    <tr>
+                        <td>{{addOne @index}}</td>
+                        <td>{{full_name}}</td>
+                        <td>{{phone_number}}</td>
+                        <td>
+                            {{#ifCondition user_type '==' 'user'}}
+                                User
+                            {{else}}
+                                Listener
+                            {{/ifCondition}}
+                        </td>
+                        <td>
+                            {{#ifCondition google_docs_status '==' 0}}
+                                <span class="text-warning">Pending</span>
+                            {{/ifCondition}}
+
+                            {{#ifCondition google_docs_status '==' 1}}
+                                <span class="text-primary">Sent</span>
+                            {{/ifCondition}}
+
+                            {{#ifCondition google_docs_status '==' 2}}
+                                <span class="text-success">Received Responce</span>
+                            {{/ifCondition}}
+                        </td>
+                        <td>
+                            <label class="radio" for="radio__toggle4">
+                                {{#ifCondition is_active '==' 1}}
+                                    <input class="radio__toggle status_toggle_btn" data-id="{{id}}" type="checkbox" checked>
+                                {{else}}
+                                    <input class="radio__toggle status_toggle_btn" data-id="{{id}}" type="checkbox">
+                                {{/ifCondition}}
+                            </label>
+                        </td>
+                        <td>
+                            {{#ifCondition google_docs_status '==' 0}}
+                                <a href="#" class="action_btn docs-sent" data-id="{{id}}"><i class="fa fa-link"></i></a>
+                            {{/ifCondition}}
+                            <a href="/admin/users-management/user-details/{{id}}" class="action_btn"><i class="fa fa-eye"></i></a>
+                            {{!-- <a href="#" class="action_btn"><i class="fa fa-pen"></i></a> --}}
+                            <a href="#" class="action_btn delete-user" data-id="{{id}}"><i class="fa fa-trash-can"></i></a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>       
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+    $(document).on('click', '.status_toggle_btn', function(){
+        var userId = $(this).attr('data-id');
+        if ($(this).prop('checked')) {
+            var status = 1;
+        } else {
+           var status = 0;
+        }
+        $.ajax({
+            url: '/admin/users-management/user-status-action',
+            method: 'POST',
+            data: {
+              userId:userId,
+              status:status,
+            },
+            success: function(response) {
+              if(response.status == 'success'){
+                    toastr.success(response.message);
+              }else{
+                    toastr.error(response.message);
+              }  
+             
+            },
+            error: function() {
+              toastr.error('Something went wrong.');
+            }
+        });
+    });
+
+    $(document).on('click', '.delete-user', function(){
+        var userId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Delete User',
+            text: 'Are you sure you want to delete this user?', 
+            btnText: 'Yes, delete',
+            icon: 'warning'
+        };
+        var url = '/admin/users-management/delete-user/'+userId;
+        alertBox(alertData, url);
+    });
+
+
+    $(document).on('click', '.docs-sent', function(){
+        var userId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Form link sent',
+            text: 'Are you sure you want to sent form link to this user?', 
+            btnText: 'Yes, sent',
+            icon: 'info'
+        };
+        var url = '/admin/google-docs-sent/'+userId;
+        alertBox(alertData, url);
+    });
+  
+</script>

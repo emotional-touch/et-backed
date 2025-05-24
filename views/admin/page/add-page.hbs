@@ -1,0 +1,146 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="common_table page_detail_page">
+            <div class="user_detail_page">
+                <button class="back_btn"><a href="/admin/page-management/list"><i class="fa fa-arrow-left"></i></a>
+                    {{#if pageInfo }} Edit {{else}} Add {{/if}} Page
+                </button>
+            </div>
+
+            <div class="addnew_user_form">
+                <form action="/admin/page-management/save" method="POST" class="common_form" id="add-page-form" enctype='multipart/form-data' >
+                    <input type="hidden" name="pageId" {{#if pageInfo }} value="{{pageInfo.id}}" {{/if}}/>
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="title">Page Name</label>
+                                <input name="title" type="text" class="form-control" id="title" aria-describedby="" placeholder="Enter Page Name" {{#if pageInfo }} value="{{pageInfo.title}}" {{/if}} >
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="title">Page Slug</label>
+                                <input type="text" class="form-control disable" id="title" aria-describedby="" placeholder="Enter Page Slug" disabled="" {{#if pageInfo }} value="{{pageInfo.slug}}" {{/if}} >
+                            </div>
+                        </div>
+
+                        {{#if (isEqual pageInfo.slug 'about-us')}}
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="title">Image</label>
+                                <input type="file" name="image" class="form-control" id="image" aria-describedby="" accept="image/*" >
+                            </div>
+                        </div>
+                        {{/if}}
+                        
+                        <div class="col-sm-12 col-12">
+                            <div class="form-group textarea">
+                                <label for="description">Description</label>
+                                 <textarea class="form-control description" name="description" id="description" >{{#if pageInfo }} {{pageInfo.description}} {{/if}}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="meta_title">Meta Title</label>
+                                <input name="meta_title" type="text" class="form-control" id="meta_title" aria-describedby="" placeholder="Enter Meta Title" {{#if pageInfo }} value="{{pageInfo.meta_title}}" {{/if}} >
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-12">
+                            <div class="form-group textarea">
+                                <label for="meta_description">Meta Description</label>
+                                 <textarea class="form-control meta_description" name="meta_description" id="meta_description" >{{#if pageInfo }} {{pageInfo.meta_description}} {{/if}}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="meta_keywords">Meta Keywords</label>
+                                <input name="meta_keywords" type="text" class="form-control" id="meta_keywords" aria-describedby="" placeholder="Enter Meta Keywords" {{#if pageInfo }} value="{{pageInfo.meta_keywords}}" {{/if}} >
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <button type="submit" class="btn custom_btn">Add</button>
+                </form>
+            </div>  
+        </div>
+    </div>
+</div>
+{{> footer-script }} 
+<script src="/js/ckeditor/ckeditor.js" ></script>
+<script>
+    ck_app = { 
+        getckeditor: function(element,ck_config){
+            if(ck_config == ""){
+                var ck_config = {
+                    height:'20em',
+                    removeButtons:'Source,Templates,Save,NewPage,ExportPdf,Preview,Print,Cut,Undo,Redo,Copy,Paste,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,About,Maximize,BGColor,ShowBlocks,TextColor,Styles,Format,Font,FontSize,Iframe,Flash,Table,Image,HorizontalRule,Smiley,SpecialChar,PageBreak,Link,Unlink,Anchor,Language,BidiRtl,BidiLtr,JustifyLeft,Blockquote,Outdent,Indent,CreateDiv,JustifyCenter,JustifyRight,JustifyBlock,BulletedList,NumberedList,CopyFormatting,RemoveFormat,Underline,Strike,Superscript,Subscript',
+                    removePlugins: 'elementspath'
+                };
+            }
+            var eleid = element.attr('id');
+            if($('#'+eleid).length){
+                CKEDITOR.replace(eleid,ck_config);
+                CKEDITOR.config.allowedContent = true;
+            }
+
+        },
+    }
+
+    var ck_config = {
+        height:'20em',
+        // removeButtons:'Templates,Save,NewPage,ExportPdf,Preview,Print,Cut,Undo,Redo,Copy,Paste,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,About,Maximize,BGColor,ShowBlocks,TextColor,Styles,Format,Font,FontSize,Iframe,Flash,Table,Image,HorizontalRule,Smiley,SpecialChar,PageBreak,Link,Unlink,Anchor,Language,BidiRtl,BidiLtr,JustifyLeft,Blockquote,Outdent,Indent,CreateDiv,JustifyCenter,JustifyRight,JustifyBlock,NumberedList,CopyFormatting,RemoveFormat,Underline,Strike,Superscript,Subscript',
+        removePlugins: 'elementspath'
+    };
+    ck_app.getckeditor($('#description'),ck_config);
+</script>
+<script>
+    $(document).ready(function() {
+        $('#add-page-form').validate({
+            rules: {
+                title: {
+                    required: true,
+                },
+                description: {
+                    required: true,
+                },
+                meta_title: {
+                    required: true,
+                },
+                meta_keywords: {
+                    required: true,
+                },
+                meta_description: {
+                    required: true,
+                },
+            },
+            messages: {
+                title: {
+                    required: 'Please enter title.',
+                },
+                description: {
+                    required: 'Please enter description.',
+                },
+                meta_title: {
+                    required: 'Please enter meta title.',
+                },
+                meta_keywords: {
+                    required: 'Please enter meta keywords.',
+                },
+                meta_description: {
+                    required: 'Please enter meta description.',
+                },
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    })
+
+</script>

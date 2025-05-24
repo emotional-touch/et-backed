@@ -1,0 +1,213 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+
+        <div class="dashboard_heighlight">
+            <div class="dashboard_page_box">
+                <i class="fa fa-indian-rupee-sign"></i>
+                <div class="txt">
+                    <p class="count">{{ getTotalCommission }}</p>
+                    <p class="count_name">Total Commission</p>
+                </div>
+            </div>
+            <div class="dashboard_page_box">
+                <i class="fa fa-indian-rupee-sign"></i>
+                <div class="txt">
+                    <p class="count">{{ getTotalGiftCommission }}</p>
+                    <p class="count_name">Total Gift Commission</p>
+                </div>
+            </div>
+            <div class="dashboard_page_box">
+                <i class="fa fa-indian-rupee-sign"></i>
+                <div class="txt">
+                    <p class="count">{{ getTotalChatCommission }}</p>
+                    <p class="count_name">Total Chat/Call Commission</p>
+                </div>
+            </div>
+        </div>
+        <div class=" common_table">
+            <div class="cmn_table_title">
+                <h3 class="title">Commission Lists</h3>
+             </div>
+            <table id="commission-management" class="display table custom_cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Sr. No</th>
+                        <th>Transaction Id</th>
+                        <th>From Name</th>
+                        <th>To Name</th>
+                        <th>Description</th>
+                        <th>Paid By User</th>
+                        <th>Received By Listener</th>
+                        <th>Commission</th>
+                        <th>Type</th>
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    {{!-- {{#each commissionList}}
+                    <tr>
+                        <td>{{addOne @index}}</td>
+                        <td>
+                           
+                            {{#ifCondition entry_type '==' 2}}
+                                {{last_word}}
+                            {{else}}
+                                {{from_full_name}}
+                            {{/ifCondition}}
+                        </td>
+                        <td>
+                            {{#ifCondition entry_type '==' 2}}
+                                {{full_name}}
+                            {{else}}
+                                {{to_full_name}}
+                            {{/ifCondition}}
+                        </td>
+                        <td>{{description}}</td>
+                        <td>
+                            {{#ifCondition entry_type '==' 0}}
+                                {{ amount }}
+                            {{/ifCondition}}
+
+                            {{#ifCondition entry_type '==' 2}}
+                                {{ gift_total }}
+                            {{/ifCondition}}
+                        </td>
+                        <td>
+                            {{#ifCondition entry_type '==' 0}}
+                                {{received_amount}}
+                            {{/ifCondition}}
+
+                            {{#ifCondition entry_type '==' 2}}
+                                {{ amount }}
+                            {{/ifCondition}}
+                        </td>
+                        <td>{{service_fee}}</td>
+                        <td
+                            {{#ifCondition entry_type '==' 0}}
+                                <span>{{service_type}}</span>
+                            {{/ifCondition}}
+
+                            {{#ifCondition entry_type '==' 2}}
+                                <span>gift</span>
+                            {{/ifCondition}}
+                        </td>
+                    </tr>
+                    {{/each}} --}}
+                </tbody>
+            </table>       
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+
+<script>
+    $(document).ready(function() {
+    var table = $('#commission-management').DataTable({
+        dom: 'Blfrtip',
+        buttons: [{
+                extend:'excelHtml5',
+                filename: 'commission_list'
+        }],
+        //lengthMenu: [10, 25, 50, 100, 500, 1000, 3000],
+        lengthMenu: [[10, 25, 50, 100, 500, -1], [10, 25, 50, 100, 500, "All"]],
+        responsive: true,
+        serverSide: true,
+        processing: true,
+        ajax: {
+          url: '/admin/commission/get-commission-list',
+          type: 'GET',
+          data: function(d) {
+            d.page = Math.floor(d.start / d.length) + 1;
+            d.pageSize = d.length;
+            d.search = d.search || '';
+          },
+           dataSrc: function(json) {
+                // Update the recordsTotal and recordsFiltered values
+                table.page.info().recordsTotal = json.recordsTotal;
+                table.page.info().recordsFiltered = json.recordsFiltered;
+                return json.data;
+            }
+        },
+        columns: [
+          {data: null,
+            render: function(data, type, row, meta) {
+                    // Calculate the correct index based on current page and page length
+                    var index = meta.row + 1 + (meta.settings._iDisplayStart / meta.settings._iDisplayLength) * meta.settings._iDisplayLength;
+                    return index;
+                }
+          },
+        { 
+                data: 'wallet_transaction_id',
+                render: function(data, type, rowData, row) {
+                  return "<a href='/admin/payment-management/details/"+rowData.wt_id+"' target='_blank'>"+data+"</a>";
+                } 
+                
+        },
+         { data: 'from_full_name' , render: function (data, type, rowData, row) {
+                    // Check if id is equal to 5
+                    if (rowData.entry_type == 2) {
+                        return rowData.last_word;
+                    }else{
+                        if(!rowData.from_full_name){
+                            return "<span class='text-danger'>Record Deleted</span>";
+                        }else{
+                            return rowData.from_full_name;
+                        }
+                        
+                    }
+           }},
+          { data: 'to_full_name', render: function (data, type, rowData, row) {
+                    // Check if id is equal to 5
+                    if (rowData.entry_type == 2) {
+                        if(!rowData.full_name){
+                            return "<span class='text-danger'>Record Deleted</span>";
+                        }else{
+                            return rowData.full_name;
+                        }
+                    }else{
+                        if(!rowData.to_full_name){
+                            return "<span class='text-danger'>Record Deleted</span>";
+                        }else{
+                            return rowData.to_full_name;
+                        }
+                    }
+           }},
+          { data: 'description', },
+          { data: 'gift_total' , render: function (data, type, rowData, row) {
+                // Check if id is equal to 5
+                if (rowData.entry_type == 0) {
+                    return rowData.amount;
+                }else{
+                    return rowData.gift_total;
+                }
+           }},
+          { data: 'received_amount' , render: function (data, type, rowData, row) {
+                if (rowData.entry_type == 0) {
+                    return rowData.received_amount;
+                }else{
+                    return rowData.amount;
+                }
+           }},
+           { data: 'service_fee', },
+           { data: 'service_type' , render: function (data, type, rowData, row) {
+                if (rowData.entry_type == 0) {
+                    return '<span>'+rowData.service_type+'</span>';
+                }else{
+                    return '<span>gift</span>';
+                }
+           }},
+        ],
+        language: {
+            searchPlaceholder: "Search",
+            search: ""
+        },
+        paging: true,
+        pageLength: 10 
+    });
+    });
+  
+</script>

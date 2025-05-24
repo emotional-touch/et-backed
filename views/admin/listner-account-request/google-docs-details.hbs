@@ -1,0 +1,103 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="common_table">
+            <div class="view_detail_page">
+                <div class="accept_btns">
+                    <button type="btn" class="custom_btn accept-listner" data-id="{{userId}}">Accept</button>
+                    <button type="btn" class="custom_btn light reject-listner" data-id="{{userId}}">Reject</button>
+                </div>
+                <div class="question_box">
+                    <h2 class="question">Full Name</h2>
+                    <p class="answer">{{docsData.[1]}}</p>
+                </div>
+                <div class="question_box">
+                     <h2 class="question">Contact Number</h2>
+                     <p class="answer">{{docsData.[2]}}</p>
+                </div>
+                <div class="question_box">
+                     <h2 class="question"> Email Address</h2>
+                     <p class="answer">{{docsData.[3]}}</p>
+                </div>
+                  <div class="question_box">
+                     <h2 class="question">Date of Birth </h2>
+                     <p class="answer">{{docsData.[4]}}</p>
+                </div>
+                  <div class="question_box">
+                     <h2 class="question"> Gender</h2>
+                     <p class="answer">{{docsData.[5]}}</p>
+                </div>
+                  <div class="question_box">
+                     <h2 class="long question">Tell us about yourself?</h2>
+                     <p class="answer">{{docsData.[6]}}</p>
+                </div>
+                  <div class="question_box">
+                     <h2 class="long question"> How do others describe you?</h2>
+                     <p class="answer">{{docsData.[7]}}</p>
+                </div>
+                 <div class="question_box">
+                     <h2 class="long question"> What would you do if a customer was being unnecessarily rude to you??</h2>
+                     <p class="answer">{{docsData.[8]}}</p>
+                </div>
+                 <div class="question_box">
+                     <h2 class="long question">Why do you want to work with Emotional Touch?</h2>
+                     <p class="answer">{{docsData.[9]}}</p>
+                </div>
+                <div class="question_box">
+                     <h2 class="long question">How did you hear about this position?</h2>
+                     <p class="answer">{{docsData.[10]}}</p>
+                </div>
+                {{#if docsData.[11]}}
+                    <div class="question_box">
+                        <h2 class="question">Resume </h2>
+                        <p class="answer"><a href="{{fixImageUrl docsData.[11]}}" target="_blank" >Click here</a></p>
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+   
+    $(document).on('click', '.delete-user', function(){
+        var userId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Delete User',
+            text: 'Are you sure you want to delete this user?', 
+            btnText: 'Yes, delete',
+            icon: 'warning'
+        };
+        var url = '/admin/users-management/delete-user/'+userId;
+        alertBox(alertData, url);
+    });
+
+ 
+    $(document).on('click', '.accept-listner', function(){
+        var userId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Accept listner request',
+            text: 'Are you sure you want to accept this listner request?', 
+            btnText: 'Yes, accept',
+            icon: 'info'
+        };
+        var url = '/admin/accept-account-request/'+userId;
+        alertBox(alertData, url);
+    });
+
+
+    $(document).on('click', '.reject-listner', function(){
+        var userId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Reject listner request',
+            text: 'Are you sure you want to reject this listner request?', 
+            btnText: 'Yes, reject',
+            icon: 'info'
+        };
+        var url = '/admin/reject-account-request/'+userId;
+        alertBox(alertData, url);
+    });
+</script>

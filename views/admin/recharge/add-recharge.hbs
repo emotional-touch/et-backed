@@ -1,0 +1,61 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="user_mgmnt_page common_table">
+            <div class="user_detail_page">
+                <button class="back_btn"><a href="/admin/recharge-management/list"><i class="fa fa-arrow-left"></i></a>
+                    Add Recharge Plan
+                </button>
+            </div>
+
+            <div class="addnew_user_form">
+                <form action="/admin/recharge-management/save" method="POST" class="common_form" id="add-recharge-form">
+                    <input type="hidden" name="rechargeId" {{#if rechargeInfo }} value="{{rechargeInfo.id}}" {{/if}}/>
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="name">Recharge Amount</label>
+                                <input name="recharge_amount" oninput="this.value=this.value.replace(/[^0-9]/g,'');" type="text" class="form-control" id="recharge_amount" aria-describedby="" placeholder="Enter recharge amount" {{#if rechargeInfo }} value="{{rechargeInfo.recharge_amount}}" {{/if}} >
+                            </div>
+                        </div>
+
+                        {{!-- <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="name">GST %</label>
+                                <input name="gst_percentage" oninput="this.value=this.value.replace(/[^0-9]/g,'');" type="text" class="form-control" id="gst_percentage" aria-describedby="" placeholder="Enter gst percentage" {{#if rechargeInfo }} value="{{rechargeInfo.gst_percentage}}" {{else}} value="18" {{/if}} >
+                            </div>
+                        </div> --}}
+                        
+                    </div>
+                    <button type="submit" class="btn custom_btn">Add</button>
+                </form>
+            </div>  
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+    $(document).ready(function() {
+        $('#add-recharge-form').validate({
+            rules: {
+                recharge_amount: {
+                    required: true,
+                },
+            },
+            messages: {
+                recharge_amount: {
+                    required: 'Please enter recharge amount.',
+                },
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    });
+</script>

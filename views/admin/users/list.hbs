@@ -1,0 +1,313 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+         {{> admin-header }}
+        <!-- other content -->
+        <div class="usermgmt_detail_page common_table">
+            {{#ifCondition currentPath '==' '/admin/users-management/list'}}
+                <div class="add_user">
+                    <a href="/admin/users-management/add" class="add_user_btn"><i class="fa fa-circle-plus"></i> </i>Add New User</a>
+                </div>
+             {{/ifCondition}} 
+            <div class="chat_row right">
+                <div class="chat_col">
+                    <div class="select-date">
+                        <div class="form-group">
+                            <label for="startdate">From Join Date</label>
+                            <input type="date" class="form-control date" name="start_date" id="start-date-user" aria-describedby="" placeholder="Start Date" >
+                        </div>
+                        <div class="form-group">
+                            <label for="enddate">To Join Date</label>
+                            <input type="date" class="form-control date" name="end_date" id="end-date-user" aria-describedby="" placeholder="End Date">
+                        </div>
+                    </div>
+                </div>
+            </div>   
+            <table id="user-management" class="display table custom_cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Sr. No</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Mobile Number</th>
+                        <th>Registration Date</th>
+                        <th>Wallet Balance</th>
+                        <th>Form Status</th>
+                        <th>Account Freeze</th>
+                        <th>Wallet Freeze</th>
+                        <th>Device</th>
+                        <th style="width:200px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                </tbody>
+            </table>        
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+ 
+<script>
+    var currentPath = '{{ currentPath }}';
+    $(document).ready(function() {
+        var dataType = 'listner';
+        var userType = 'listener';
+        if(currentPath == '/admin/users-management/list'){
+            dataType = 'user';
+            userType = 'user';
+        } 
+        var table = $('#user-management').DataTable({
+            dom: 'Blfrtip',
+            buttons: [{
+                    extend:'excelHtml5',
+                    filename: userType+'_data'
+            }],
+            //lengthMenu: [10, 25, 50, 100, 500, 1000, 3000],
+            lengthMenu: [[10, 25, 50, 100, 500, -1], [10, 25, 50, 100, 500, "All"]],
+            responsive: true,
+            serverSide: true,
+            processing: true,
+            ajax: {
+            url: '/admin/users-management/get-user-list',
+            type: 'GET',
+            data: function(d) {
+                var startDateUser = $('#start-date-user').val();
+                var endDateUser = $('#end-date-user').val(); 
+                d.page = Math.floor(d.start / d.length) + 1;
+                d.pageSize = d.length;
+                d.search = d.search || '';
+                d.dataType = dataType;
+                d.startDateUser = startDateUser;
+                d.endDateUser = endDateUser;
+            },
+            dataSrc: function(json) {
+                    // Update the recordsTotal and recordsFiltered values
+                    table.page.info().recordsTotal = json.recordsTotal;
+                    table.page.info().recordsFiltered = json.recordsFiltered;
+                    return json.data;
+                }
+            },
+            columns: [
+            {data: null,
+                render: function(data, type, row, meta) {
+                        // Calculate the correct index based on current page and page length
+                        var index = meta.row + 1 + (meta.settings._iDisplayStart / meta.settings._iDisplayLength) * meta.settings._iDisplayLength;
+                        return index;
+                    }
+            },
+            { data: 'full_name' },
+            { data: 'email' },
+            { data: 'phone_number' },
+            { data: 'created_date_time' , render: function (data, type, rowData, row) {
+                        return data;
+            }},
+            { data: 'wallet_balance' },
+            { data: 'google_docs_status' , render: function (data, type, rowData, row) {
+                        // Check if id is equal to 5
+                        var docStatus = '';
+                        if (data == 0) {
+                            docStatus = '<span class="text-warning">Pending</span>';
+                        }else if(data == 1){
+                            docStatus = '<span class="text-primary">Sent</span>';
+                        }else if(data == 2){
+                            docStatus = '<span class="text-success">Received Responce</span>';
+                        }
+                        return docStatus;
+            }},
+            { data: 'account_freeze_status' , render: function (data, type, rowData, row) {
+                    // Check if id is equal to 5
+                    var checkboxHtml = '<label class="radio" for="radio__toggle4">';
+                    if (data == 1) {
+                        checkboxHtml += '<input class="radio__toggle acc_freeze_toggle_btn" data-id="' + rowData.id + '" type="checkbox" checked>';
+                    }else{
+                        checkboxHtml += '<input class="radio__toggle acc_freeze_toggle_btn" data-id="' + rowData.id + '" type="checkbox">';
+                    }
+                    checkboxHtml += '</label>';
+                    return checkboxHtml;
+            }},
+            { data: 'wallet_freeze_status' , render: function (data, type, rowData, row) {
+                    // Check if id is equal to 5
+                    var checkboxHtml = '<label class="radio" for="radio__toggle4">';
+                    if (data == 1) {
+                        checkboxHtml += '<input class="radio__toggle wallet_freeze_toggle_btn" data-id="' + rowData.id + '" type="checkbox" checked>';
+                    }else{
+                        checkboxHtml += '<input class="radio__toggle wallet_freeze_toggle_btn" data-id="' + rowData.id + '" type="checkbox">';
+                    }
+                    checkboxHtml += '</label>';
+                    return checkboxHtml;
+            }},
+            { 
+                    data: 'device_name',
+                    render: function(data, type, row) {
+                        if (!data) {
+                            return "-------";
+                        } else {
+                            return data;
+                        }
+                    }
+                },
+            {
+                    data: null,
+                    render: function(data, type, rowData, row) {
+                        var actionHtml = "";
+
+                        // Check if deleted_at is not null
+                        if (rowData.deleted_at != null) {
+                            actionHtml += '<a href="#" class="action_btn recover-deleted-user" data-id="' + rowData.id + '"><i class="fa-solid fa-rotate-right"></i></a>';
+                        }
+
+                        // Check if google_docs_status is equal to 0
+                        if (rowData.google_docs_status == 0 || rowData.google_docs_status == 1) {
+                            actionHtml += '<a href="#" class="action_btn docs-sent" data-id="' + rowData.id + '"><i class="fa fa-link"></i></a>';
+                        }
+
+                        // Always add the view details action
+                        actionHtml += '<a href="/admin/users-management/user-details/' + rowData.id + '" class="action_btn"><i class="fa fa-eye"></i></a>';
+
+                        // Check user_type and add edit action accordingly
+                        if (rowData.user_type == 'user') {
+                            actionHtml += '<a href="/admin/users-management/edit/' + rowData.id + '" class="action_btn"><i class="fa fa-pen"></i></a>';
+                        } else {
+                            actionHtml += '<a href="/admin/users-management/edit-listener/' + rowData.id + '" class="action_btn"><i class="fa fa-pen"></i></a>';
+                        }
+
+                        // Always add the delete action
+                        actionHtml += '<a href="#" class="action_btn delete-user" data-id="' + rowData.id + '" data-toggle="tooltip" data-placement="top" title="Permanent delete"><i class="fa fa-trash-can"></i></a>';
+
+                        //soft delete
+                        if (rowData.deleted_at == null) {
+                            actionHtml += '<a href="#" class="action_btn soft-delete-user" data-id="' + rowData.id + '" data-toggle="tooltip" data-placement="top" title="Soft Delete"><i class="fa fa-eraser"></i></a>';
+                        }
+                        // Set the HTML content to the cell
+                        return actionHtml;
+                    }
+                },
+
+            ],
+            language: {
+                searchPlaceholder: "Search",
+                search: ""
+            },
+            paging: true,
+            pageLength: 10 
+        });
+
+        $('#start-date-user').on('change', function(){
+          table.draw();
+        });
+
+        $('#end-date-user').on('change', function(){
+          table.draw();
+        });
+
+    });
+
+    $(document).on('click', '.acc_freeze_toggle_btn', function(){
+        var userId = $(this).attr('data-id');
+        if ($(this).prop('checked')) {
+            var status = 1;
+        } else {
+           var status = 0;
+        }
+        $.ajax({
+            url: '/admin/users-management/user-acc-freeze-action',
+            method: 'POST',
+            data: {
+              userId:userId,
+              status:status,
+            },
+            success: function(response) {
+              if(response.status == 'success'){
+                    toastr.success(response.message);
+              }else{
+                    toastr.error(response.message);
+              }  
+             
+            },
+            error: function() {
+              toastr.error('Something went wrong.');
+            }
+        });
+    });
+
+    $(document).on('click', '.wallet_freeze_toggle_btn', function(){
+        var userId = $(this).attr('data-id');
+        if ($(this).prop('checked')) {
+            var status = 1;
+        } else {
+           var status = 0;
+        }
+        $.ajax({
+            url: '/admin/users-management/user-wallet-freeze-action',
+            method: 'POST',
+            data: {
+              userId:userId,
+              status:status,
+            },
+            success: function(response) {
+              if(response.status == 'success'){
+                    toastr.success(response.message);
+              }else{
+                    toastr.error(response.message);
+              }  
+             
+            },
+            error: function() {
+              toastr.error('Something went wrong.');
+            }
+        });
+    });
+
+ 
+    $(document).on('click', '.delete-user', function(){
+        var userId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Permanent Delete User',
+            text: 'Are you sure you want to permanent delete this user?', 
+            btnText: 'Yes, delete',
+            icon: 'warning'
+        };
+        var url = '/admin/users-management/delete-user/'+userId;
+        alertBox(alertData, url);
+    });
+
+     $(document).on('click', '.soft-delete-user', function(){
+        var userId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Soft Delete User',
+            text: 'Are you sure you want to soft delete this user?', 
+            btnText: 'Yes, delete',
+            icon: 'warning'
+        };
+        var url = '/admin/users-management/soft-delete-user/'+userId;
+        alertBox(alertData, url);
+    });
+
+    $(document).on('click', '.recover-deleted-user', function(){
+        var userId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Recover Account',
+            text: 'Are you sure you want to recover this account?', 
+            btnText: 'Yes, recover',
+            icon: 'warning'
+        };
+        var url = '/admin/users-management/deleted-user-recover/'+userId;
+        alertBox(alertData, url);
+    });
+
+   
+    $(document).on('click', '.docs-sent', function(){
+        var userId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Form link sent',
+            text: 'Are you sure you want to sent form link to this user?', 
+            btnText: 'Yes, sent',
+            icon: 'info'
+        };
+        var url = '/admin/google-docs-sent/'+userId;
+        alertBox(alertData, url);
+    });
+  
+</script>

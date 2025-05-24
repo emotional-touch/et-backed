@@ -1,0 +1,84 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="setting_page common_table">
+            <div class="add_user">
+                <a href="/admin/charge-management/user/add" class="add_user_btn"> Add Charges</a>
+                {{!-- <a href="/admin/charge-management/gst/edit" class="add_user_btn"><i class="fa fa-money-bill"></i> </i>GST Charge</a> --}}
+            </div>
+            <table id="setting-management" class="display table cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th style="width: 350px;">Listener</th>
+                        <th style="width: 350px;">Service</th>
+                        <th style="width: 350px;">Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each chargeList}}
+                    <tr>
+                        <td>{{#if user_name}}{{user_name}}{{else}}Default{{/if}}</td>
+                        <td>
+                            <div class="service_table">
+                                <i class="fa fa-message"></i>
+                                <i class="fa fa-phone"></i>
+                                <i class="fa fa-video"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="prices">
+                                <p class="text">Rs. {{chat_charge}} Per Min</p>
+                                <p class="text">Rs. {{call_charge}} Per Min</p>
+                                <p class="text">Rs. {{vcall_charge}} Per Min</p>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="/admin/charge-management/user/edit/{{id}}" class="action_btn"><i class=" fa fa-pen"></i></a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>        
+        </div>
+
+        {{!-- <div class="charge_page common_table">
+            <div class="add_user">
+                <a href="/admin/charge-management/user/add" class="add_user_btn"><i class="fa fa-circle-plus"></i> </i>User Charge</a>
+            </div>
+            <table id="charge-management" class="display table cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Listeners</th>
+                        <th>Call Charge</th>
+                        <th>Chat Charge</th>
+                        <th>Video Call Charge</th>
+                        <th style="width:150px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each chargeList}}
+                    <tr>
+                        <td>{{user_name}}</td>
+                        <td>{{call_charge}}</td>
+                        <td>{{chat_charge}}</td>
+                        <td>{{vcall_charge}}</td>
+                        <td> 
+                            <a href="/admin/charge-management/user/edit/{{id}}" class="action_btn"><i class=" fa fa-pen"></i></a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>        
+        </div> --}}
+    </div>
+</div>
+{{> footer-script }}
+<script>
+   
+    
+  
+</script>

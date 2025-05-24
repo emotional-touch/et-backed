@@ -1,0 +1,54 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+         <div class="subadmin_management_page common_table">
+            <div class="add_user">
+                <a href="/admin/subadmin-management/add" class="add_user_btn"><i class="fa fa-circle-plus"></i> </i>Add New Sub Admin</a>
+            </div>
+            <table id="subadmin-management" class="display table cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        {{!-- <th>Assigned Modules</th> --}}
+                        <th style="width:150px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each adminList}}
+                    <tr>
+                        <td>{{name}}</td>
+                        <td>{{role}}</td>
+                        {{!-- <td>User Management</td> --}}
+                        <td>
+                              {{!-- <a href="#" class="action_btn"><i class=" fa fa-eye"></i></a> --}}
+                            <a href="/admin/subadmin-management/edit/{{id}}" class="action_btn"><i class=" fa fa-pen"></i></a>
+                            <a href="#" class="action_btn delete-admin" data-id="{{id}}"><i class="fa fa-trash-can"></i></a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table> 
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+
+<script>
+
+    $(document).on('click', '.delete-admin', function(){
+        var roleId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Delete Sub Admin',
+            text: 'Are you sure you want to delete this sub admin?', 
+            btnText: 'Yes, delete',
+            icon: 'warning'
+        };
+        var url = '/admin/subadmin-management/delete/'+roleId;
+        alertBox(alertData, url);
+    });
+  
+</script>

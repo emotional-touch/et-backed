@@ -1,0 +1,34 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+         <div class="refer-earn-list_page common_table">
+            <div class="add_user">
+                <a href="/admin/refer-earn-management/set-referral-amount" class="add_user_btn"><i class="fa fa-circle-plus"></i> </i>Set Referral Credit Amount</a>
+            </div>
+            <table id="refer-earn-list" class="display table cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Referral Code</th>
+                        <th>Referral User</th>
+                        <th>Credits</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each referearnList}}
+                    <tr>
+                        <td>{{refer_from_name}}</td>
+                        <td>{{referral_code}}</td>
+                        <td>{{refer_to_name}}</td>
+                        <td>{{credits}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>        
+        </div>
+    </div>
+</div>
+{{> footer-script }}

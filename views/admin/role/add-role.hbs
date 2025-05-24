@@ -1,0 +1,79 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="role_mgmt common_table">
+            <div class="user_detail_page">
+                <button class="back_btn"><a href="/admin/role-management/list"><i class="fa fa-arrow-left"></i></a>
+                   {{#if roleInfo }} Edit {{else}} Add {{/if}} Role
+                </button>
+            </div>
+
+            <div class="addnew_user_form">
+                <form action="/admin/role-management/save" method="POST" class="common_form" id="add-role-form" enctype='multipart/form-data' >
+                    <input type="hidden" name="roleId" {{#if roleInfo }} value="{{roleInfo.id}}" {{/if}}/>
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="rolename">Role Name</label>
+                                <input type="text" class="form-control" name="name" id="name" aria-describedby="" placeholder="Enter Role Name" {{#if roleInfo }} value="{{roleInfo.name}}" {{/if}}>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-12">
+                            <div class="form-group addrole_checkbox">
+                                <label for="rolename">Role Permission</label>
+                                 <div class="row">
+                                {{#each (permissionList)}}
+                               
+                                <div class="col-lg-4 col-md-6 col-sm-6 d-flex align-items-center gap-2 addcheckbox_col">
+                                    <input type="checkbox" class="role_checkbox mt-0" name="permission[]" value="{{@index}}" {{#if (contains ../roleInfo.permission @index) }}   checked{{/if}}>
+
+                                   <span> {{ this }}</span>
+                                </div>
+                                
+                                
+                                {{/each}}
+</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn custom_btn">Add</button>
+                </form>
+            </div>  
+        </div>
+        {{> footer-script }}
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#add-role-form').validate({
+            rules: {
+                name: {
+                    required: true,
+                },
+                "permission[]": {
+                    required: true,
+                },
+            },
+            messages: {
+                name: {
+                    required: 'Please enter name.',
+                },
+                "permission[]": {
+                    required: 'Please select permission .',
+                },
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    })
+
+</script>

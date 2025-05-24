@@ -1,0 +1,118 @@
+{{!< main}}
+<div class="main_layout gst_list_page">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+    
+         <div class="revenue_filter">
+            <div class="chat_filter">
+                <div class="common_form">
+                    <form action="/admin/gst/list" method="GET">
+                        <div class="chat_row">
+                            <div class="chat_col">
+                                <div class="select-date">
+                                    <div class="form-group">
+                                        <label for="startdate">Start Date</label>
+                                        <input type="date" class="form-control date" name="start_date" {{#ifCondition startDate '!=' ''}} value={{ startDate }} {{/ifCondition}} id="startdate" aria-describedby="" placeholder="Start Date" onchange="updateEndDateMinDate()" >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="enddate">End Date</label>
+                                        <input type="date" class="form-control date" name="end_date"  {{#ifCondition endDate '!=' ''}} value={{ endDate }} {{/ifCondition}} id="enddate" aria-describedby="" placeholder="End Date">
+                                    </div>
+                                </div>
+                                <div class="filter_btns">
+                                    <button type="submit" class="btn add_user_btn filter" id="gst_filter_btn"><i class="fa fa-search me-2"></i>Filter</button>
+                                    <a href="/admin/gst/list" class="btn add_user_btn filter">Clear</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>                                
+                </div>
+            </div>
+        </div>
+        <!-- other content -->
+
+        <div class="dashboard_heighlight">
+            <div class="dashboard_page_box">
+                <i class="fa fa-indian-rupee-sign"></i>
+                <div class="txt">
+                    <p class="count">{{ getTotalGST }}</p>
+                    <p class="count_name">Total GST</p>
+                </div>
+            </div>
+            <div class="dashboard_page_box">
+                <i class="fa fa-indian-rupee-sign"></i>
+                <div class="txt">
+                    <p class="count">{{ getTotalGiftGST }}</p>
+                    <p class="count_name">Total Gift GST</p>
+                </div>
+            </div>
+            <div class="dashboard_page_box">
+                <i class="fa fa-indian-rupee-sign"></i>
+                <div class="txt">
+                    <p class="count">{{ getTotalRechargeGST }}</p>
+                    <p class="count_name">Total Recharge GST</p>
+                </div>
+            </div>
+        </div>
+        <div class="common_table">
+            <div class="cmn_table_title">
+                <h3 class="title">GST Lists</h3>
+             </div>
+            <table id="gst-transaction-management" data-order='[[ 0, "desc" ]]' class="display table custom_cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Transaction Id</th>
+                        <th>Payment Id</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>GST</th>
+                        <th>Type</th>
+                        <th>Transation Date</th>
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    {{#each gstList}}
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>{{payment_id}}</td>
+                        <td>{{full_name}}</td>
+                        <td>{{description}}</td>
+                        <td>{{gst}}</td>
+                        <td
+                            {{#ifCondition entry_type '==' 1}}
+                                <span>Recharge</span>
+                            {{/ifCondition}}
+                            {{#ifCondition entry_type '==' 2}}
+                                <span>Gift</span>
+                            {{/ifCondition}}
+                        </td>
+                         <td>{{created_date_time}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>       
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+    $('#gst-transaction-management').DataTable({
+        dom: 'Blfrtip',
+        buttons: [{
+            extend:'excelHtml5',
+            filename: 'gst_list'
+        }],
+        //lengthMenu: [10, 25, 50, 100, 500, 1000, 3000],
+        lengthMenu: [[10, 25, 50, 100, 500], [10, 25, 50, 100, 500]],
+        responsive: true,
+        language: {
+            searchPlaceholder: "Search",
+            search: ""
+        },
+        order: [[0, 'desc']], 
+        paging: true,
+        pageLength: 10 
+    });
+</script>

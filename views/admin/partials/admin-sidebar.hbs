@@ -1,0 +1,355 @@
+
+<div class="dashboard_side">
+        <nav>
+            <div class="sideres_header">
+                <a href="/admin/dashboard" class="logo">
+                    <img class="icon_logo" src="/images/emotional-logo.svg" alt="">
+                    <img class="full_logo" src="/images/logo.svg" alt="">
+                </a>
+                <button class="sidenav_toggle">
+                    <!-- <i class="fa-sharp fa-light fa-bars"></i> -->
+                    <i class="fa fa-close"></i>
+                </button>
+            </div>
+            
+            <div class="scroll_nav">
+                <h2 class="side_title">Menu</h2>
+                <div class="side_navbar">
+                    <ul>
+                        <li class="nav_title panel_side_list {{#ifCondition currentPath '==' '/admin/dashboard'}} active {{/ifCondition}}">
+                            <a href="/admin/dashboard">
+                                <span><img src="/images/gauge.svg" alt=""></span>
+                                <span class="sidetext">Dashboard</span>
+                            </a>
+                        </li>
+                        {{#if (adminRoleAccess session.admin.permission '0')}}
+                        <li class="nav_title panel_side_list dropdown {{#ifCondition currentPath '==' '/admin/users-management/list'}} active {{/ifCondition}}">
+                            <a href="/admin/users-management/list"><span><i class="fa fa-users"></i></span>
+                            <span class="sidetext">User Management</span>
+                           
+                            </a>
+                        </li>
+                        {{/if}}
+
+                        <li class="nav_title panel_side_list dropdown {{#ifCondition currentPath '==' '/admin/listener-management/list'}} active {{/ifCondition}} 
+                        {{#ifCondition currentPath '==' '/admin/listener-account-request/list'}} active {{/ifCondition}} 
+                        {{#ifCondition currentPath '==' '/admin/profile-approval-request/list'}} active {{/ifCondition}}">
+                            <a href="/admin/listener-management/list"><span><i class="fa fa-headset"></i></span>
+                            <span class="sidetext">Listener Management</span>
+                             <i class="fa fa-chevron-right "></i>
+                            </a>
+                            <ul class="navdropdown_menu">
+                                {{#if (adminRoleAccess session.admin.permission '0')}}
+                                <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/listener-management/list'}} active {{/ifCondition}}">
+                                    <a href="/admin/listener-management/list">
+                                        <span><i class="fa fa-users"></i></span>
+                                        <span class="sidetext">
+                                            Listener List
+                                        </span>
+                                    </a>
+                                </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '1')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/listener-account-request/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/listener-account-request/list">
+                                            <span><i class="fa fa-headset"></i></span>
+                                            <span class="sidetext">
+                                                Listener Account Request List
+                                            </span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '2')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/profile-approval-request/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/profile-approval-request/list">
+                                            <span><i class="fa fa-address-card"></i></span>
+                                            <span class="sidetext">Listener Profile Approval Requests List</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                            </ul>
+                        </li>
+
+                        
+                        <li class="nav_title panel_side_list dropdown {{#ifCondition currentPath '==' '/admin/payment-management/list'}} active {{/ifCondition}} 
+                                {{#ifCondition currentPath '==' '/admin/payout-management/list'}} active {{/ifCondition}} 
+                                {{#ifCondition currentPath '==' '/admin/gst/list'}} active {{/ifCondition}} 
+                                {{#ifCondition currentPath '==' '/admin/commission/list'}} active {{/ifCondition}}  
+                                {{#ifCondition currentPath '==' '/admin/revenue-info/daily'}} active {{/ifCondition}}
+                                {{#ifCondition currentPath '==' '/admin/revenue-info/monthly'}} active {{/ifCondition}}
+                                {{#ifCondition currentPath '==' '/admin/revenue-info/yearly'}} active {{/ifCondition}}">
+                            <a href="/admin/payment-management/list">
+                                <span><i class="fa fa-money-bill"></i></span>
+                                <span class="sidetext">Payment Management</span>
+                                <i class="fa fa-chevron-right "></i>
+                            </a>
+                            <ul class="navdropdown_menu">
+                                {{#if (adminRoleAccess session.admin.permission '19')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/payment-management/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/payment-management/list">
+                                            <span><i class="fa fa-money-bill"></i></span>
+                                            <span class="sidetext">Payment List</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/payout-management/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/payout-management/list">
+                                            <span><i class="fas fa-hand-holding-usd"></i></span>
+                                            <span class="sidetext">Payout List</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '22')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/gst/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/gst/list">
+                                            <span><i class="fas fa-percent"></i></span>
+                                            <span class="sidetext">GST List</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/commission/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/commission/list">
+                                            <span><i class="fas fa-copyright"></i></span>
+                                            <span class="sidetext">Commission List</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                                <li class="nav_sub_title 
+                                {{#ifCondition currentPath '==' '/admin/revenue-info/daily'}} active {{/ifCondition}}
+                                {{#ifCondition currentPath '==' '/admin/revenue-info/monthly'}} active {{/ifCondition}}
+                                {{#ifCondition currentPath '==' '/admin/revenue-info/yearly'}} active {{/ifCondition}}
+                                ">
+                                    <a href="/admin/revenue-info/daily">
+                                        <span><i class="fas fa-sack-dollar"></i></span>
+                                        <span class="sidetext">Revenue Info</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav_title panel_side_list dropdown {{#ifCondition currentPath '==' '/admin/recharge-management/list'}} active {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/gift-management/list'}} active {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/charge-management/list'}} active {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/penalty-management/list'}} active {{/ifCondition}}
+                             {{#ifCondition currentPath '==' '/admin/coupon-management/list'}} active {{/ifCondition}}">
+                            <a href="/admin/recharge-management/list">
+                                <span><i class="fas fa-coins"></i></span>
+                                <span class="sidetext">Recharge & Charge Management</span>
+                                <i class="fa fa-chevron-right "></i>
+                            </a>
+                            <ul class="navdropdown_menu">
+                                {{#if (adminRoleAccess session.admin.permission '16')}}
+                                <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/recharge-management/list'}} active {{/ifCondition}}">
+                                    <a href="/admin/recharge-management/list">
+                                        <span><i class="fas fa-coins"></i></span>
+                                        <span class="sidetext">Recharge Plan Manage</span>
+                                    </a>
+                                </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '17')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/gift-management/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/gift-management/list">
+                                            <span><i class="fas fa-gift"></i></span>
+                                            <span class="sidetext">Gift Amount Manage</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '10')}}
+                                <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/coupon-management/list'}} active {{/ifCondition}}">
+                                    <a href="/admin/coupon-management/list">
+                                        <span><i class="fa fa-ticket"></i></span>
+                                        <span class="sidetext">Coupon Manage</span>
+                                    </a>
+                                </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '20')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/charge-management/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/charge-management/list">
+                                            <span><i class="fa fa-file-invoice-dollar"></i></span>
+                                            <span class="sidetext">Charge Manage</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '21')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/penalty-management/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/penalty-management/list">
+                                            <span><i class="fa fa-file-powerpoint"></i></span>
+                                            <span class="sidetext">Penalty Manage</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                            </ul>
+
+                        </li>
+                       
+                        
+                        <li class="nav_title panel_side_list dropdown {{#ifCondition currentPath '==' '/admin/contact-request/list'}} active {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/report-management/list'}} active {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/query-management/list'}} active {{/ifCondition}}">
+                            <a href="/admin/contact-request/list">
+                                <span><i class="fa fa-address-book"></i></span>
+                                <span class="sidetext">Contact & Queries Management</span>
+                                <i class="fa fa-chevron-right"></i>
+                            </a>
+                            <ul class="navdropdown_menu">
+                                {{#if (adminRoleAccess session.admin.permission '3')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/contact-request/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/contact-request/list">
+                                            <span><i class="fa fa-address-book"></i></span>
+                                            <span class="sidetext">Contact Manage</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '15')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/report-management/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/report-management/list">
+                                            <span><i class="fas fa-user-clock"></i></span>
+                                            <span class="sidetext">Report Manage</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '18')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/query-management/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/query-management/list">
+                                            <span><i class="fa fa-circle-info"></i></span>
+                                            <span class="sidetext">Queries Manage</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                            </ul>
+                        </li>
+                        
+                        
+                        <li class="nav_title panel_side_list dropdown {{#ifCondition currentPath '==' '/admin/page-management/list'}} active {{/ifCondition}}
+                        {{#ifCondition currentPath '==' '/admin/faq-category-management/list'}} active {{/ifCondition}}
+                        {{#ifCondition currentPath '==' '/admin/faq-management/list'}} active {{/ifCondition}}
+                        {{#ifCondition currentPath '==' '/admin/email-management/list'}} active {{/ifCondition}}
+                        {{#ifCondition currentPath '==' '/admin/topic-management/list'}} active {{/ifCondition}}
+                        {{#ifCondition currentPath '==' '/admin/refer-earn-management/list'}} active {{/ifCondition}}
+                        {{#ifCondition currentPath '==' '/admin/review-management/list'}} active {{/ifCondition}}
+                        {{#ifCondition currentPath '==' '/admin/message-management/list'}} active {{/ifCondition}}
+                        {{#ifCondition currentPath '==' '/admin/report-analysis/list'}} active {{/ifCondition}}">
+                            <a href="/admin/page-management/list">
+                                <span><i class="fas fa-pager"></i></span>
+                                <span class="sidetext">CMS & Data Management</span>
+                                <i class="fa fa-chevron-right "></i>
+                            </a>
+                            <ul class="navdropdown_menu">
+                                {{#if (adminRoleAccess session.admin.permission '4')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/page-management/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/page-management/list">
+                                            <span><i class="fas fa-pager"></i></span>
+                                            <span class="sidetext">Pages Manage</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '13')}}
+                                <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/faq-category-management/list'}} active {{/ifCondition}}">
+                                    <a href="/admin/faq-category-management/list">
+                                        <span><i class="fas fa-cubes"></i></span>
+                                        <span class="sidetext">FAQ Category Manage</span>
+                                    </a>
+                                </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '14')}}
+                                <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/faq-management/list'}} active {{/ifCondition}}">
+                                    <a href="/admin/faq-management/list">
+                                        <span><i class="fa fa-circle-question"></i></span>
+                                        <span class="sidetext">FAQ Manage</span>
+                                    </a>
+                                </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '5')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/email-management/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/email-management/list">
+                                            <span><i class="fas fa-envelope-open-text"></i></span>
+                                            <span class="sidetext">Email Manage</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '6')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/topic-management/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/topic-management/list">
+                                            <span><i class="fa fa-folder-tree"></i></span>
+                                            <span class="sidetext">Topic Manage</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                               
+                                {{#if (adminRoleAccess session.admin.permission '11')}}
+                                <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/refer-earn-management/list'}} active {{/ifCondition}}">
+                                    <a href="/admin/refer-earn-management/list">
+                                        <span><i class="fa fa-money-bill-wave"></i></span>
+                                        <span class="sidetext">Refer and Earn Manage</span>
+                                    </a>
+                                </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '12')}}
+                                <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/review-management/list'}} active {{/ifCondition}}">
+                                    <a href="/admin/review-management/list">
+                                        <span><i class="fa fa-star"></i></span>
+                                        <span class="sidetext">Review Manage</span>
+                                    </a>
+                                </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '9')}}
+                                <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/message-management/list'}} active {{/ifCondition}}">
+                                    <a href="/admin/message-management/list">
+                                        <span><i class="fa fa-comment-dots"></i></span>
+                                        <span class="sidetext">Messages, Audio, Video</span>
+                                    </a>
+                                </li>
+                                {{/if}}
+                                {{#if (adminRoleAccess session.admin.permission '22')}}
+                                <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/report-analysis/list'}} active {{/ifCondition}}">
+                                    <a href="/admin/report-analysis/list">
+                                        <span><i class="fa fa-flag"></i></span>
+                                        <span class="sidetext">Reports and Analysis</span>
+                                    </a>
+                                </li>
+                                {{/if}}
+                            </ul>
+                        </li>
+
+                        <li class="nav_title panel_side_list dropdown {{#ifCondition currentPath '==' '/admin/subadmin-management/list'}} active {{/ifCondition}}
+                        {{#ifCondition currentPath '==' '/admin/role-management/list'}} active {{/ifCondition}}">
+                            <a href="/admin/subadmin-management/list">
+                                <span> <i class="fa fa-list-check"></i></span>
+                                <span class="sidetext">Sub Admin & Role Management</span>
+                                <i class="fa fa-chevron-right "></i>
+                            </a>
+                            <ul class="navdropdown_menu">
+                                {{#if (adminRoleAccess session.admin.permission '7')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/subadmin-management/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/subadmin-management/list">
+                                            <span> <i class="fa fa-list-check"></i></span>
+                                            <span class="sidetext">Sub Admin Manage</span>
+                                        </a>
+                                    </li> 
+                                {{/if}}       
+                                {{#if (adminRoleAccess session.admin.permission '8')}}
+                                    <li class="nav_sub_title {{#ifCondition currentPath '==' '/admin/role-management/list'}} active {{/ifCondition}}">
+                                        <a href="/admin/role-management/list">
+                                        <span> <i class="fa fa-user-gear"></i></span>
+                                        <span class="sidetext">Role Manage</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                            </ul>
+                        </li>
+                       
+                       
+                        
+                        {{#if (adminRoleAccess session.admin.permission '23')}}
+                         <li class="nav_title panel_side_list dropdown {{#ifCondition currentPath '==' '/admin/setting/list'}} active {{/ifCondition}}">
+                            <a href="/admin/setting/list">
+                                <span><i class="fa fa-gear"></i></span>
+                                <span class="sidetext">Settings</span>
+                            </a>
+                        </li>
+                        {{/if}}
+                    </ul>
+            </div>
+        </div>
+    </nav>    
+</div>

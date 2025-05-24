@@ -1,0 +1,57 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="common_table">
+            <div class="user_detail_page">
+                <button class="back_btn"><i class="fa fa-arrow-left"></i>
+                    Add Charges
+                </button>
+            </div>
+
+            <div class="addnew_user_form">
+                <form action="" class="common_form">
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <input type="text" class="form-control" id="message" aria-describedby="" placeholder="message">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Call">Call</label>
+                                <input type="text" class="form-control" id="Call" aria-describedby="" placeholder="Call">
+                            </div>
+                        </div><div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="video">Video</label>
+                                <input type="text" class="form-control" id="video" aria-describedby="" placeholder="video">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                           <div class="form-group select_tag">
+                                <label for="selectlistener">Select Listener</label>
+                                {{!-- <input type="text" class="form-control" id="addCategory" aria-describedby="" placeholder="Add Category" > --}}
+                                <select name="addiction" id="selectlistener" class="form-control faq-cat">
+                                    <option value="">Addiction</option>
+                                    <option value="add">Addiction</option>
+                                    <option value="less">Addiction</option>
+                                    <option value="hamster">Hamster</option>
+                                    <option value="parrot">Parrot</option>
+                                    <option value="spider">Spider</option>
+                                    <option value="goldfish">Goldfish</option>
+                                </select>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <button class="btn custom_btn">Add</button>
+                </form>
+            </div>  
+        </div>
+        {{> footer-script }}
+    </div>
+</div>

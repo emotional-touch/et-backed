@@ -1,0 +1,126 @@
+<header>
+    <div class="header after_login">
+            <nav>
+                <div class="account_detail">
+                    
+                    <div class="menu_name">
+                        <div class="sideres_header">
+                            <!-- <a href="#" class="logo">
+                                <img class="icon_logo" src="./images/emotional-logo.svg" alt="">
+                                <img class="full_logo" src="./images/emotional-logo.png" alt="">
+                            </a> -->
+                            <button class="sidenav_toggle"><i class="fa-sharp fa-light fa-bars"></i></button>
+                        </div>
+                        <h2 class="title admin-page-head-title">
+                            {{#ifCondition currentPath '==' '/admin/dashboard'}} 
+                               <img src="/images/gauge.svg" alt="">Dashboard
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/users-management/list'}} 
+                                <i class="fa fa-users"></i>User Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/listener-account-request/list'}} 
+                                <i class="fa fa-headset"></i>Listener Account Request 
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/profile-approval-request/list'}} 
+                                <i class="fa fa-address-card"></i>Listener Profile Approval Requests 
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/contact-request/list'}} 
+                                <i class="fa fa-address-book"></i>Contact Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/page-management/list'}} 
+                                <i class="fas fa-pager"></i>Page Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/email-management/list'}} 
+                                <i class="fas fa-envelope-open-text"></i>Email Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/topic-management/list'}} 
+                                <i class="fa fa-folder-tree"></i>Topic Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/subadmin-management/list'}} 
+                                <i class="fa fa-list-check"></i>Sub Admin Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/role-management/list'}} 
+                                <i class="fa fa-user-gear"></i>Role Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/message-management/list'}} 
+                                <i class="fa fa-comment-dots"></i>Messages, Audio, Video
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/coupon-management/list'}} 
+                                <i class="fa fa-ticket"></i>Coupon Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/refer-earn-management/list'}} 
+                                <i class="fa fa-money-bill-wave"></i>Refer and Earn Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/review-management/list'}} 
+                                <i class="fa fa-star"></i>Review Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/faq-management/list'}} 
+                                <i class="fa fa-circle-question"></i>FAQ Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/faq-category-management/list'}} 
+                                <i class="fas fa-cubes"></i>FAQ Category Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/report-management/list'}} 
+                                <i class="fas fa-user-clock"></i>Report Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/recharge-management/list'}} 
+                                <i class="fas fa-th"></i>Recharge Plan Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/gift-management/list'}} 
+                                <i class="fas fa-gift"></i>Gift Amount Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/query-management/list'}} 
+                                <i class="fa fa-circle-info"></i>Queries Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/payment-management/list'}} 
+                                <i class="fa fa-money-bill"></i>Payment Management
+                            {{/ifCondition}}
+
+                            {{#ifCondition currentPath '==' '/admin/payout-management/list'}} 
+                                <i class="fas fa-hand-holding-usd"></i>Payout Management
+                            {{/ifCondition}}
+
+                            {{#ifCondition currentPath '==' '/admin/charge-management/list'}} 
+                                <i class="fa fa-file-invoice-dollar"></i>Charge Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/penalty-management/list'}} 
+                                <i class="fa fa-file-powerpoint"></i>Penalty Management
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/report-analysis/list'}} 
+                                <i class="fa fa-flag"></i>Report amd Analysis
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/commission/list'}} 
+                                <i class="fa fa-percent"></i>Commission List
+                            {{/ifCondition}}
+                            {{#ifCondition currentPath '==' '/admin/setting/list'}} 
+                                <i class="fa fa-gear"></i>Settings
+                            {{/ifCondition}}
+                            
+                        </h2>
+                    </div>
+
+                    <div class="notification_user">
+                        {{!-- <div class="notification">
+                            <i class="fa fa-bell"></i>
+                            <div class="active" style="display: none;"></div>
+                            <div class="deactive"></div>
+                        </div> --}}
+                        <div class="user">
+
+                            <div class="dropdown">
+                                <button class="user_dp btn dropdown-toggle p-0" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img class="rounded-circle me-lg-2" src="/images/default-profile.jpg" alt="">
+                                    <span class="d-none d-lg-inline-flex">Admin</span>
+                                </button>
+                                <ul class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item {{#ifCondition currentPath '==' '/admin/my-profile'}} active {{/ifCondition}}" href="/admin/my-profile">My Profile </a></li>
+                                <li><a class="dropdown-item {{#ifCondition currentPath '==' '/admin/change-password'}} active {{/ifCondition}}" href="/admin/change-password">Change Password</a></li>
+                                <li><a class="dropdown-item" href="/admin/logout">Log Out</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+    </div>
+</header>

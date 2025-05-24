@@ -1,0 +1,64 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="user_mgmnt_page common_table">
+            <div class="user_detail_page">
+                <button class="back_btn"><a href="/admin/dashboard"><i class="fa fa-arrow-left"></i></a>
+                    Sent Push Notification to User
+                </button>
+            </div>
+
+            <div class="push_notification_form addnew_user_form">
+                <form action="/admin/push-notification/sent-notification" method="POST" class="common_form" id="add-notification-form">
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="title">Notification Title</label>
+                                <input name="title" type="text" class="form-control" id="title" aria-describedby="" placeholder="Enter Notification Title" >
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="message">Notification Message </label>
+                                <input type="text" name="message" class="form-control" id="message" aria-describedby="" placeholder="Enter Notification Message" >
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn custom_btn">Add</button>
+                </form>
+            </div>  
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+    $(document).ready(function() {
+        $('#add-notification-form').validate({
+            rules: {
+                title: {
+                    required: true,
+                },
+                message: {
+                    required: true
+                },
+            },
+            messages: {
+                title: {
+                    required: 'Please enter notification title.',
+                },
+                message: {
+                    required: 'Please enter notification message.',
+                },
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    });
+</script>

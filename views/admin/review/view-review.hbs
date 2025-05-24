@@ -1,0 +1,183 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="common_table view_review_page">
+            <div class="user_detail_page ">
+                <button class="back_btn"><a href="/admin/review-management/list"><i class="fa fa-arrow-left"></i></a>
+                    View Review
+                </button>
+            </div>
+
+            <div class="details_page view_review">
+
+                <ul class="nav nav-tabs" id="review-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="given-review" data-bs-toggle="tab" data-bs-target="#given" type="button" role="tab" aria-controls="home" aria-selected="true">Given Reviews</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#received" type="button" role="tab" aria-controls="profile" aria-selected="false">Received Reviews</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="given" role="tabpanel" aria-labelledby="given-review"><div class="profile">
+                        <div class="profile_img">
+                            <img src="{{listenerInfo.profile_photo}}" alt="">
+                        </div>
+                        <div class="profile_name">
+                            <h3 class="name">{{listenerInfo.full_name}}</h3>
+                            {{!-- <p class="at_name">@anushkashetty</p> --}}
+                        </div>
+                    </div>
+                    <div class="review_sec">
+                        <div class="review_row">
+                            <h3 class="detail_sm_title">Reviews</h3>
+                            <div class="rating">
+                                <p>Total Reviews: <b>{{reviewGivenInfo.review_count}}</b></p><span class="line">|</span><p>Average Rating</p>
+                                <span><i class="fa fa-star yellow"></i></span><p>{{reviewGivenInfo.avg_rating}}</p>
+                            </div>
+                        </div>  
+                        {{#each reviewGiven}}
+                        <div class="review_box">
+                            <div class="profile_date">
+                                <div class="profile">
+                                    <div class="profile_img">
+                                        <img src="{{profile_photo}}" alt="">
+                                    </div>
+                                    <div class="profile_name">
+                                        <h3 class="name">{{user_name}}</h3>
+                                        <p class="stars">
+                                            <i class="fa fa-star yellow"></i>    
+                                        <span class="rate">{{rating}}</span> </p>
+                                    </div>
+                                </div>
+                                <div class="date_time">
+                                    <p class="date">{{formatTime created_at "DD-M-Y"}}</p>
+                                    <p class="time">{{formatTime created_at "H:m a"}}</p>
+                                </div>
+                            </div>
+                            <p class="detail_data">
+                                {{review}}
+                            </p>
+                            <label class="radio" for="radio__toggle4">
+                                {{#ifCondition status '==' 1}}
+                                        <input class="radio__toggle status_toggle_btn" data-id="{{id}}" type="checkbox" checked>
+                                {{else}}
+                                    <input class="radio__toggle status_toggle_btn" data-id="{{id}}" type="checkbox">
+                                {{/ifCondition}}
+                               <span class="action_btn delete-review mt-3" data-id="{{id}}"><i class="fa fa-trash-can"></i></span>
+                              </label>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="received" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="profile">
+                    <div class="profile_img">
+                        <img src="{{listenerInfo.profile_photo}}" alt="">
+                    </div>
+                    <div class="profile_name">
+                        <h3 class="name">{{listenerInfo.full_name}}</h3>
+                        {{!-- <p class="at_name">@anushkashetty</p> --}}
+                    </div>
+                    </div>
+                    <div class="review_sec">
+                        <div class="review_row">
+                            <h3 class="detail_sm_title">Reviews</h3>
+                            <div class="rating">
+                                <p>Total Reviews: <b>{{reviewReceivedInfo.review_count}}</b></p><span class="line">|</span><p>Average Rating</p>
+                                <span><i class="fa fa-star yellow"></i></span><p>{{reviewReceivedInfo.avg_rating}}</p>
+                            </div>
+                        </div>  
+                        {{#each reviewReceived}}
+                        <div class="review_box">
+                            <div class="profile_date">
+                                <div class="profile">
+                                    <div class="profile_img">
+                                        <img src="{{profile_photo}}" alt="">
+                                    </div>
+                                    <div class="profile_name">
+                                        <h3 class="name">{{user_name}}</h3>
+                                        <p class="stars">
+                                            <i class="fa fa-star yellow"></i>    
+                                            {{!-- <i class="fa fa-star yellow"></i>    
+                                            <i class="fa fa-star yellow"></i>    
+                                            <i class="fa fa-star yellow"></i>    
+                                            <img src="../../../images/border-star.svg" alt="" class="start-img">  --}}
+                                        <span class="rate">{{rating}}</span> </p>
+                                    </div>
+                                </div>
+                                <div class="date_time">
+                                    <p class="date">{{formatTime created_at "DD-M-Y"}}</p>
+                                    <p class="time">{{formatTime created_at "H:m a"}}</p>
+                                </div>
+                            </div>
+                            <p class="detail_data">
+                                {{review}}
+                            </p>
+
+                            <label class="radio" for="radio__toggle4">
+                               {{#ifCondition status '==' 1}}
+                                        <input class="radio__toggle status_toggle_btn" data-id="{{id}}" type="checkbox" checked>
+                                {{else}}
+                                    <input class="radio__toggle status_toggle_btn" data-id="{{id}}" type="checkbox">
+                                {{/ifCondition}}
+                                <span class="action_btn delete-review mt-3" data-id="{{id}}"><i class="fa fa-trash-can"></i></span>
+                              </label>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+
+                
+            </div> 
+        </div>
+        {{> footer-script }}
+    </div>
+</div>
+
+<script>
+    $(document).on('click', '.delete-review', function(){
+        var reviewId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Delete Review',
+            text: 'Are you sure you want to delete this review?', 
+            btnText: 'Yes, delete',
+            icon: 'warning'
+        };
+        var url = '/admin/review-management/delete-review/'+reviewId;
+        alertBox(alertData, url);
+    });
+   
+    $(document).on('click', '.status_toggle_btn', function(){
+        var reviewId = $(this).attr('data-id');
+        if ($(this).prop('checked')) {
+            var status = 1;
+        } else {
+           var status = 0;
+        }
+        $.ajax({
+            url: '/admin/review-management/review-status-action',
+            method: 'POST',
+            data: {
+              reviewId:reviewId,
+              status:status,
+            },
+            success: function(response) {
+              if(response.status == 'success'){
+                    toastr.success(response.message);
+              }else{
+                    toastr.error(response.message);
+              }  
+             
+            },
+            error: function() {
+              toastr.error('Something went wrong.');
+            }
+        });
+    });
+  
+</script>

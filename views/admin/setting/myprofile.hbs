@@ -1,0 +1,66 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="common_table my_profile_page">
+            <div class="user_detail_page">
+                <button class="back_btn"><i class="fa fa-arrow-left"></i>
+                  My Profile
+                </button>
+            </div>
+
+            <div class="addnew_user_form">
+                <form action="/admin/my-profile-post" method="POST" class="common_form" id="my-profile-form">
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="fullname">Full Name</label>
+                                <input type="text" class="form-control" id="fullname" name="name" aria-describedby="" value="{{adminDetails.name}}" placeholder="Enter Full Name">
+                                <span >
+                                    <i class="fa fa-pen edit-pen" ></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="emailadd">Email Address</label>
+                                <input type="text" class="form-control" disabled id="emailadd" aria-describedby="" value="{{adminDetails.email}}" placeholder="Enter Email Address">
+                                <span >
+                                    <i class="fa fa-ban edit-pen" ></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn custom_btn">Update</button>
+                </form>
+            </div>  
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+    $(document).ready(function() {
+        $('#my-profile-form').validate({
+            rules: {
+                name: {
+                    required: true,
+                },
+            },
+            messages: {
+                name: {
+                    required: "Please enter full name",
+                },
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    });
+</script>

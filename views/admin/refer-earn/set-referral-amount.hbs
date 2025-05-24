@@ -1,0 +1,71 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="common_table">
+            <div class="user_detail_page">
+                <button class="back_btn"><i class="fa fa-arrow-left"></i>
+                    Set Referral Credit Amount
+                </button>
+            </div>
+
+            <div class="addnew_user_form">
+                <form action="/admin/refer-earn-management/save" method="POST" class="common_form" id="add-refer-form" enctype='multipart/form-data' >
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="referral_amount">Add Referral Credit Amount</label>
+                                <input type="text" class="form-control" oninput="this.value=this.value.replace(/[^0-9]/g,'');" id="referral_amount" name="referral_amount" aria-describedby="" placeholder="Referral Amount" value="{{referralAmtInfo.value}}">
+                            </div>
+                            <input type="hidden" name="refAmtId" value="{{referralAmtInfo.id}}" />
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="referral_percentage">Add Referral Credit Percentage (%)</label>
+                                <input type="text" class="form-control" oninput="this.value=this.value.replace(/[^0-9]/g,'');" id="referral_percentage" name="referral_percentage" aria-describedby="" placeholder="Referral Percentage" value="{{referralPerInfo.value}}">
+                            </div>
+                            <input type="hidden" name="refPerId" value="{{referralPerInfo.id}}" />
+                        </div>  
+                       
+                    </div>
+                    <button class="btn custom_btn">Add</button>
+                </form>
+            </div>  
+        </div>
+        {{> footer-script }}
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#add-refer-form').validate({
+            rules: {
+                referral_amount: {
+                    required: true,
+                    number: true,
+                },
+                referral_percentage: {
+                    required: true,
+                    number: true,
+                },
+            },
+            messages: {
+                referral_amount: {
+                    required: 'Please enter referral amount.',
+                },
+                referral_percentage: {
+                    required: 'Please enter referral percentage.',
+                },
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    })
+
+</script>

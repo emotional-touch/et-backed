@@ -1,0 +1,89 @@
+{{!< main}}
+<div class="main_layout revenue_info_page">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <div class="common_form">
+            <div class="revenue_filter">
+                <div class="year_dropdown">
+                    <div class="from-group">
+                        <label class="text-white" for="services">Duration</label>
+                        <select name="service" id="selectDuration" class="form-control faq-cat" onchange="redirectToLink()">
+                            <option>Select Filter</option>
+                            <option value="/admin/revenue-info/daily" {{#ifCondition timePeriod '==' 'daily'}} selected {{/ifCondition}}>Daily</option>
+                            <option value="/admin/revenue-info/monthly" {{#ifCondition timePeriod '==' 'monthly'}} selected {{/ifCondition}}>Monthly</option>
+                            <option value="/admin/revenue-info/yearly" {{#ifCondition timePeriod '==' 'yearly'}} selected {{/ifCondition}}>Yearly</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="normal_txt">
+                    <h6 class="text-white mt-2">OR</h6>
+                </div>
+                  
+                <div class="chat_filter">
+                    <form action="/admin/revenue-info" method="GET">
+                            <div class="chat_row">
+                                <div class="chat_col">
+                                    <div class="select-date">
+                                        <div class="form-group">
+                                            <label for="startdate">Start Date</label>
+                                            <input type="date" class="form-control date" name="start_date" {{#ifCondition startDate '!=' ''}} value={{ startDate }} {{/ifCondition}} id="startdate" aria-describedby="" placeholder="Start Date" onchange="updateEndDateMinDate()" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="enddate">End Date</label>
+                                            <input type="date" class="form-control date" name="end_date"  {{#ifCondition endDate '!=' ''}} value={{ endDate }} {{/ifCondition}} id="enddate" aria-describedby="" placeholder="End Date">
+                                        </div>
+                                    </div>
+                                    <div class="filter_btns">
+                                        <button type="submit" class="btn add_user_btn filter" id="revenue_filter_btn"><i class="fa fa-search me-2"></i>Filter</button>
+                                        <a href="/admin/revenue-info/daily" class="btn add_user_btn filter">Clear</a>
+                                    </div>
+                                </div>
+                            </div>
+                    </form>                                
+                </div>
+            </div>
+        </div>
+        <!-- other content -->
+
+        <div class="dashboard_heighlight">
+            <div class="dashboard_page_box">
+                <i class="fa fa-user"></i>
+                <div class="txt">
+                    <p class="count">₹{{totalSales}}</p>
+                    <p class="count_name">Total Sales</p>
+                </div>
+            </div>
+            <div class="dashboard_page_box">
+                <i class="fa fa-user"></i>
+                <div class="txt">
+                    <p class="count">₹{{totalGST}}</p>
+                    <p class="count_name">Total GST</p>
+                </div>
+            </div>
+            <div class="dashboard_page_box">
+                <i class="fa fa-user"></i>
+                <div class="txt">
+                    <p class="count">₹{{totalListenerRevenue}}</p>
+                    <p class="count_name">Total Listener Revenue</p>
+                </div>
+            </div>
+            <div class="dashboard_page_box">
+                <i class="fa fa-user"></i>
+                <div class="txt">
+                    <p class="count">₹{{companyRevenue}}</p>
+                    <p class="count_name">Total Company Revenue</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+    function redirectToLink() {
+        var selectedValue = document.getElementById("selectDuration").value;
+        if (selectedValue) {
+            window.location.href = selectedValue;
+        }
+    }
+</script>

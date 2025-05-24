@@ -1,0 +1,104 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="common_table faq_detail_page">
+            <div class="user_detail_page">
+                <button class="back_btn"><a href="/admin/faq-management/list"><i class="fa fa-arrow-left"></i></a>
+                    {{#if faqInfo }} Edit {{else}} Add {{/if}} FAQ
+                </button>
+            </div>
+
+            <div class="addnew_user_form">
+                <form action="/admin/faq-management/save" method="POST" class="common_form" id="add-faq-form">
+                    <input type="hidden" name="faqId" {{#if faqInfo }} value="{{faqInfo.id}}" {{/if}}/>
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="selectcategory">Select Category</label>
+                               
+                                <select name="category_id" id="select-cat" class="form-control faq-cat">
+                                    {{#each faqCategoryList}}
+                                    <option {{#if faqInfo }} {{isEqual faqInfo.category_id faqCategoryList.id}} {{/if}} value="{{id}}">{{name}}</option>
+                                    {{/each}}   
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="selectcategory">Select User Type</label>
+                                <select name="user_type" id="select-cat" class="form-control faq-cat">
+                                    <option {{#if faqInfo }} {{isEqual faqInfo.user_type 'user'}} {{/if}} value="user">User</option>
+                                    <option {{#if faqInfo }} {{isEqual faqInfo.user_type 'listner'}} {{/if}} value="listner">Listener</option>
+                                </select>
+
+
+
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-12">
+                            <div class="form-group textarea">
+                                <label for="addquestion">Add Question</label>
+                                {{!-- <input type="text" class="form-control" id="addquestion" aria-describedby="" placeholder="Add Category" value="Is it normal to feel lonely even when surrounded by people?"> --}}
+                                 <textarea class="form-control addquestion" name="question" id="addquestion" >{{#if faqInfo }} {{faqInfo.question}} {{/if}}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-12">
+                            <div class="form-group textarea">
+                                <label for="addanswer">Add Answer</label>
+                                <textarea class="form-control addanswer" name="answer" id="addanswer" cols="30" rows="10" >{{#if faqInfo }} {{faqInfo.answer}} {{/if}}</textarea>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <button type="submit" class="btn custom_btn">Add</button>
+                </form>
+            </div>  
+        </div>
+    </div>
+</div>
+{{> footer-script }} 
+
+<script>
+    $(document).ready(function() {
+        $('#add-faq-form').validate({
+            rules: {
+                category_id: {
+                    required: true,
+                },
+                user_type: {
+                    required: true,
+                },
+                question: {
+                    required: true,
+                },
+                answer: {
+                    required: true,
+                },
+            },
+            messages: {
+                category_id: {
+                    required: 'Please select category.',
+                },
+                user_type: {
+                    required: 'Please select user type.',
+                },
+                question: {
+                    required: 'Please enter question.',
+                },
+                answer: {
+                    required: 'Please enter answer.',
+                },
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    })
+
+</script>

@@ -1,0 +1,614 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }} 
+        <!-- other content --> 
+         <div class="payment_management_page common_table">
+            <div class="tab_section">
+                <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Recharge</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Gift</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Service</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-payout-tab" data-bs-toggle="pill" data-bs-target="#pills-payout" type="button" role="tab" aria-controls="pills-payout" aria-selected="false">Payout</button>
+                </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active text-white" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div class="chat_row right">
+                            <div class="chat_col">
+                                <div class="select-date">
+                                    <div class="form-group">
+                                        <label for="startdate">Start Date</label>
+                                        <input type="date" class="form-control date" name="start_date" id="start-date-recharge" aria-describedby="" placeholder="Start Date" >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="enddate">End Date</label>
+                                        <input type="date" class="form-control date" name="end_date"  id="end-date-recharge" aria-describedby="" placeholder="End Date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="recharge-management" class="display table custom_cmn_table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No</th>
+                                    <th>Transaction Id</th>
+                                    <th>Payment Id</th>
+                                    <th>Name</th>
+                                    <th>Recharge Amount</th>
+                                    <th>GST (₹)</th>
+                                    <th>Country</th>
+                                    <th>State</th>
+                                    <th>Transaction Status</th>
+                                    <th>Transaction Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            
+                            </tbody>
+                        </table>  
+                    </div>
+                    <div class="tab-pane fade text-white" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"> 
+                        <div class="chat_row right">
+                            <div class="chat_col">
+                                <div class="select-date">
+                                    <div class="form-group">
+                                        <label for="startdate">Start Date</label>
+                                        <input type="date" class="form-control date" name="start_date" id="start-date-gift" aria-describedby="" placeholder="Start Date" >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="enddate">End Date</label>
+                                        <input type="date" class="form-control date" name="end_date"  id="end-date-gift" aria-describedby="" placeholder="End Date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       <table id="gift-management" class="display table custom_cmn_table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No</th>
+                                    <th>Transaction Id</th>
+                                    <th>Payment Id</th>
+                                    <th> Name</th>
+                                    <th>Gift Status</th>
+                                    <th>Gift Amount</th>
+                                    <th>GST (₹)</th>
+                                    <th>Country</th>
+                                    <th>State</th>
+                                    <th>Admin Commission</th>
+                                    <th>Transaction Status</th>
+                                    <th>Transaction Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            
+                            </tbody>
+                        </table> 
+                    </div>
+                    <div class="tab-pane fade text-white" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"> 
+                        <div class="chat_row right">
+                            <div class="chat_col">
+                                <div class="select-date">
+                                    <div class="form-group">
+                                        <label for="startdate">Start Date</label>
+                                        <input type="date" class="form-control date" name="start_date" id="start-date-service" aria-describedby="" placeholder="Start Date" >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="enddate">End Date</label>
+                                        <input type="date" class="form-control date" name="end_date"  id="end-date-service" aria-describedby="" placeholder="End Date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <table id="service-management" class="display table custom_cmn_table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No</th>
+                                    <th>Transaction Id</th>
+                                    <th>Service Type</th>
+                                    <th>Transaction Type</th>
+                                    <th>Name</th>
+                                    <th>Minutes</th>
+                                    <th>Total Amount</th>
+                                    <th>Net Amount</th>
+                                    <th>Admin Commission</th>
+                                    <th>Transaction Status</th>
+                                    <th>Transaction Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            
+                            </tbody>
+                        </table> 
+                    </div>
+                    <div class="tab-pane fade text-white" id="pills-payout" role="tabpanel" aria-labelledby="pills-payout-tab">
+                        <div class="chat_row right">
+                            <div class="chat_col">
+                                <div class="select-date">
+                                    <div class="form-group">
+                                        <label for="startdate">Start Date</label>
+                                        <input type="date" class="form-control date" name="start_date" id="start-date-payout" aria-describedby="" placeholder="Start Date" >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="enddate">End Date</label>
+                                        <input type="date" class="form-control date" name="end_date" id="end-date-payout" aria-describedby="" placeholder="End Date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="payout-record-management" class="display table custom_cmn_table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No</th>
+                                    <th>Transaction Id</th>
+                                    <th>Listener Name</th>
+                                    <th>Payout Amount</th>
+                                    <th>Description</th>
+                                    <th>Transaction Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            
+                            </tbody>
+                        </table>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+    $(document).ready(function() {
+        var table = $('#recharge-management').DataTable({
+            dom: 'Blfrtip',
+            buttons: [{
+                 extend:'excelHtml5',
+                 filename: 'payment_recharge_tab'
+            }],
+            //lengthMenu: [10, 25, 50, 100, 500, 1000, 3000],
+            lengthMenu: [[10, 25, 50, 100, 500, -1], [10, 25, 50, 100, 500, "All"]],
+            responsive: true,
+            serverSide: true,
+            processing: true,
+            ajax: {
+            url: '/admin/users-management/get-recharge-transaction',
+            type: 'GET',
+            data: function(d) {
+                var startDateRecharge = $('#start-date-recharge').val();
+                var endDateRecharge = $('#end-date-recharge').val(); 
+                d.page = Math.floor(d.start / d.length) + 1;
+                d.pageSize = d.length;
+                d.search = d.search || '';
+                d.userId = '';
+                d.startDateRecharge = startDateRecharge;
+                d.endDateRecharge = endDateRecharge;
+            },
+            dataSrc: function(json) {
+                    // Update the recordsTotal and recordsFiltered values
+                    table.page.info().recordsTotal = json.recordsTotal;
+                    table.page.info().recordsFiltered = json.recordsFiltered;
+                    return json.data;
+                }
+            },
+            columns: [
+                {data: null,
+                    render: function(data, type, row, meta) {
+                            // Calculate the correct index based on current page and page length
+                            var index = meta.row + 1 + (meta.settings._iDisplayStart / meta.settings._iDisplayLength) * meta.settings._iDisplayLength;
+                            return index;
+                        }
+                },
+                { 
+                    data: 'wallet_transaction_id',
+                    render: function(data, type, rowData, row) {
+                    return "<a href='/admin/payment-management/details/"+rowData.id+"' target='_blank'>"+data+"</a>";
+                    } 
+                    
+                },
+                { data: 'transaction_id' },
+                { 
+                    data: 'full_name',
+                    render: function(data, type, rowData, row) {
+                        if (!data) {
+                            return "<span class='text-danger'>Record Deleted</span>";
+                        } else {
+                            return "<a href='/admin/users-management/user-details/"+rowData.user_key+"' target='_blank'>"+data+"</a>";
+                        }
+                    } 
+                },
+                { data: 'amount' },
+                { data: 'gst' },
+                { 
+                    data: 'country',
+                    render: function(data, type, row) {
+                        if (!data) {
+                            return "-------";
+                        } else {
+                            return data;
+                        }
+                    }
+                },
+                { 
+                    data: 'state',
+                    render: function(data, type, row) {
+                        if (!data) {
+                            return "-------";
+                        } else {
+                            return data;
+                        }
+                    }
+                },
+                { data: 'transaction_status' , render: function (data, type, rowData, row) {
+                        // Check if id is equal to 5
+                        if (data == 'pending') {
+                            return '<span class="text-warning">Pending</span>';
+                        }else if(data == 'failed'){
+                            return '<span class="text-danger">Failed</span>';
+                        }else{
+                            return '<span class="text-success">Success</span>';
+                        }
+                    }
+                },
+                { data: 'created_date_time' },
+            ],
+            language: {
+                searchPlaceholder: "Search",
+                search: ""
+            },
+            paging: true,
+            pageLength: 10 
+        });
+
+        var table1 = $('#gift-management').DataTable({
+            dom: 'Blfrtip',
+            buttons: [{
+                extend:'excelHtml5',
+                filename: 'payment_gift_tab'
+            }],
+            //lengthMenu: [10, 25, 50, 100, 500, 1000, 3000],
+            lengthMenu: [[10, 25, 50, 100, 500, -1], [10, 25, 50, 100, 500, "All"]],
+            responsive: true,
+            serverSide: true,
+            processing: true,
+            ajax: {
+            url: '/admin/users-management/get-gift-transaction',
+            type: 'GET',
+            data: function(d) {
+                var startDateGift = $('#start-date-gift').val();
+                var endDateGift = $('#end-date-gift').val(); 
+                d.page = Math.floor(d.start / d.length) + 1;
+                d.pageSize = d.length;
+                d.search = d.search || '';
+                d.userId = '';
+                d.startDateGift = startDateGift;
+                d.endDateGift = endDateGift;
+            },
+            dataSrc: function(json) {
+                // Update the recordsTotal and recordsFiltered values
+                table1.page.info().recordsTotal = json.recordsTotal;
+                table1.page.info().recordsFiltered = json.recordsFiltered;
+                return json.data;
+            }
+            },
+            columns: [
+                {data: null,
+                    render: function(data, type, row, meta) {
+                            // Calculate the correct index based on current page and page length
+                            var index = meta.row + 1 + (meta.settings._iDisplayStart / meta.settings._iDisplayLength) * meta.settings._iDisplayLength;
+                            return index;
+                        }
+                },
+                { 
+                    data: 'wallet_transaction_id',
+                    render: function(data, type, rowData, row) {
+                    return "<a href='/admin/payment-management/details/"+rowData.id+"' target='_blank'>"+data+"</a>";
+                    } 
+                    
+                },
+                { 
+                    data: 'transaction_id',
+                    render: function(data, type, row) {
+                        if (!data) {
+                            return "-------------";
+                        } else {
+                            return data;
+                        }
+                    }
+                },
+                { 
+                    data: 'gift_person_name',
+                    render: function(data, type, rowData, row) {
+                        if (!data) {
+                            return "<span class='text-danger'>Record Deleted</span>";
+                        } else {
+                            return "<a href='/admin/users-management/user-details/"+rowData.user_key+"' target='_blank'>"+data+"</a>";
+                        }
+                    }
+                },
+                { 
+                    data: 'transaction_type',
+                    render: function(data, type, row) {
+                        if (data == 'credit') {
+                            return "Gift Received";
+                        } else {
+                            return "Gift Sent";
+                        }
+                    }
+                },
+                { data: 'amount' },
+                { data: 'gst' },
+                { 
+                    data: 'country',
+                    render: function(data, type, row) {
+                        if (!data) {
+                            return "-------";
+                        } else {
+                            return data;
+                        }
+                    }
+                },
+                { 
+                    data: 'state',
+                    render: function(data, type, row) {
+                        if (!data) {
+                            return "-------";
+                        } else {
+                            return data;
+                        }
+                    }
+                },
+                { data: 'service_fee' },
+                { data: 'transaction_status' , render: function (data, type, rowData, row) {
+                        // Check if id is equal to 5
+                        if (data == 'pending') {
+                            return '<span class="text-warning">Pending</span>';
+                        }else if(data == 'failed'){
+                            return '<span class="text-danger">Failed</span>';
+                        }else{
+                            return '<span class="text-success">Success</span>';
+                        }
+                    }
+                },
+                { data: 'created_date_time' },
+            ],
+            language: {
+                searchPlaceholder: "Search",
+                search: ""
+            },
+            paging: true,
+            pageLength: 10 
+        });
+
+        var table2 = $('#service-management').DataTable({
+            dom: 'Blfrtip',
+            buttons: [{
+                 extend:'excelHtml5',
+                 filename: 'payment_service_tab'
+            }],
+            //lengthMenu: [10, 25, 50, 100, 500, 1000, 3000],
+            lengthMenu: [[10, 25, 50, 100, 500, -1], [10, 25, 50, 100, 500, "All"]],
+            responsive: true,
+            serverSide: true,
+            processing: true,
+            ajax: {
+            url: '/admin/users-management/get-service-transaction',
+            type: 'GET',
+            data: function(d) {
+                var startDateService = $('#start-date-service').val();
+                var endDateService = $('#end-date-service').val(); 
+                d.page = Math.floor(d.start / d.length) + 1;
+                d.pageSize = d.length;
+                d.search = d.search || '';
+                d.userId = '';
+                d.startDateService = startDateService;
+                d.endDateService = endDateService;
+            },
+            dataSrc: function(json) {
+                // Update the recordsTotal and recordsFiltered values
+                table2.page.info().recordsTotal = json.recordsTotal;
+                table2.page.info().recordsFiltered = json.recordsFiltered;
+                return json.data;
+            }
+            },
+            columns: [
+                {data: null,
+                    render: function(data, type, row, meta) {
+                            // Calculate the correct index based on current page and page length
+                            var index = meta.row + 1 + (meta.settings._iDisplayStart / meta.settings._iDisplayLength) * meta.settings._iDisplayLength;
+                            return index;
+                        }
+                },
+                { 
+                    data: 'wallet_transaction_id',
+                    render: function(data, type, rowData, row) {
+                    return "<a href='/admin/payment-management/details/"+rowData.id+"' target='_blank'>"+data+"</a>";
+                    } 
+                    
+                },
+                { 
+                    data: 'charge_type',
+                    
+                },
+                { data: 'transaction_type' },
+                { 
+                    data: 'session_user_name',
+                    render: function(data, type, rowData, row) {
+                        if (!data) {
+                            return "<span class='text-danger'>Record Deleted</span>";
+                        } else {
+                            return "<a href='/admin/users-management/user-details/"+rowData.user_key+"' target='_blank'>"+data+"</a>";
+                        }
+                    }  
+                },
+                { data: 'minutes' },
+                { data: 'amount' },
+                { 
+                    data: 'amount' ,
+                    render: function (data, type, rowData, row) {
+                        // Check if id is equal to 5
+                        if (rowData.transaction_type == 'debit') {
+                            return rowData.amount;
+                        }else{
+                            var totalAmt = rowData.amount - rowData.service_fee;
+                            return totalAmt;
+                        }
+                    }
+                },
+                { data: 'service_fee' },
+                { data: 'transaction_status' , render: function (data, type, rowData, row) {
+                        // Check if id is equal to 5
+                        if (data == 'pending') {
+                            return '<span class="text-warning">Pending</span>';
+                        }else if(data == 'failed'){
+                           return '<span class="text-danger">Failed</span>';
+                        }else{
+                            return '<span class="text-success">Success</span>';
+                        }
+                    }
+                },
+                { data: 'created_date_time' },
+                {
+                data: null,
+                render: function(data, type, rowData, row) {
+                    var actionHtml = "";
+                    // Always add the delete action
+                    actionHtml += '<a href="#" class="action_btn delete-transaction" data-id="' + rowData.wallet_transaction_id + '"><i class="fa fa-trash-can"></i></a>';
+                    // Set the HTML content to the cell
+                    return actionHtml;
+                },
+            },
+            ],
+            language: {
+                searchPlaceholder: "Search",
+                search: ""
+            },
+            paging: true,
+            pageLength: 10 
+        });
+
+        var table3 = $('#payout-record-management').DataTable({
+            dom: 'Blfrtip',
+            buttons: [{
+                 extend:'excelHtml5',
+                 filename: 'payment_payout_tab'
+            }],
+            //lengthMenu: [10, 25, 50, 100, 500, 1000, 3000],
+            lengthMenu: [[10, 25, 50, 100, 500, -1], [10, 25, 50, 100, 500, "All"]],
+            responsive: true,
+            serverSide: true,
+            processing: true,
+            ajax: {
+            url: '/admin/users-management/get-payout-record-transaction',
+            type: 'GET',
+            data: function(d) {
+                var startDatePayout = $('#start-date-payout').val();
+                var endDatePayout = $('#end-date-payout').val(); 
+                d.page = Math.floor(d.start / d.length) + 1;
+                d.pageSize = d.length;
+                d.search = d.search || '';
+                d.userId = '';
+                d.startDatePayout = startDatePayout;
+                d.endDatePayout = endDatePayout;
+            },
+            dataSrc: function(json) {
+                    // Update the recordsTotal and recordsFiltered values
+                    table.page.info().recordsTotal = json.recordsTotal;
+                    table.page.info().recordsFiltered = json.recordsFiltered;
+                    return json.data;
+                }
+            },
+            columns: [
+                {data: null,
+                    render: function(data, type, row, meta) {
+                            // Calculate the correct index based on current page and page length
+                            var index = meta.row + 1 + (meta.settings._iDisplayStart / meta.settings._iDisplayLength) * meta.settings._iDisplayLength;
+                            return index;
+                        }
+                },
+                { 
+                    data: 'wallet_transaction_id',
+                    render: function(data, type, rowData, row) {
+                    return "<a href='/admin/payment-management/details/"+rowData.id+"' target='_blank'>"+data+"</a>";
+                    } 
+                    
+                },
+                { 
+                    data: 'full_name',
+                    render: function(data, type, rowData, row) {
+                        if (!data) {
+                            return "<span class='text-danger'>Record Deleted</span>";
+                        } else {
+                            return "<a href='/admin/users-management/user-details/"+rowData.user_key+"' target='_blank'>"+data+"</a>";
+                        }
+                    } 
+                },
+                { data: 'amount' },
+                { data: 'description' },
+                { data: 'created_date_time' },
+            ],
+            language: {
+                searchPlaceholder: "Search",
+                search: ""
+            },
+            paging: true,
+            pageLength: 10 
+        });
+
+        $('#start-date-recharge').on('change', function(){
+          table.draw();
+        });
+
+        $('#end-date-recharge').on('change', function(){
+          table.draw();
+        });
+
+
+        $('#start-date-gift').on('change', function(){
+          table1.draw();
+        });
+
+        $('#end-date-gift').on('change', function(){
+          table1.draw();
+        });
+
+
+        $('#start-date-service').on('change', function(){
+          table2.draw();
+        });
+
+        $('#end-date-service').on('change', function(){
+          table2.draw();
+        });
+
+
+        $('#start-date-payout').on('change', function(){
+          table3.draw();
+        });
+
+        $('#end-date-payout').on('change', function(){
+          table3.draw();
+        });
+});
+
+$(document).on('click', '.delete-transaction', function(){
+        var walleteTransactionId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Delete Transaction',
+            text: 'Are you sure you want to delete this transaction?', 
+            btnText: 'Yes, delete',
+            icon: 'warning'
+        };
+        var url = '/admin/payment-management/delete-transaction/'+walleteTransactionId;
+        alertBox(alertData, url);
+    });
+</script>

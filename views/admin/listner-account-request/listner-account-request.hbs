@@ -1,0 +1,93 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="common_table">
+            <table id="listener-profile-approval-requests" class="display table cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Sr. No</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Mobile Number</th>
+                        <th>Listener Status</th>
+                        <th>Docs</th>
+                        <th style="width:170px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each listnerList}}
+                        <tr>
+                            <td>{{addOne @index}}</td>
+                            <td>{{full_name}}</td>
+                            <td>{{email}}</td>
+                            <td>{{phone_number}}</td>
+                            <td>
+                                {{#ifCondition listner_status '==' 1}}
+                                    <span class="text-warning">Pending</span>
+                                {{/ifCondition}}
+
+                                {{#ifCondition listner_status '==' 2}}
+                                    <span class="text-success">Accepted</span>
+                                {{/ifCondition}}
+
+                                {{#ifCondition listner_status '==' 3}}
+                                    <span class="text-danger">Rejected</span>
+                                {{/ifCondition}}
+                            </td>
+                            <td><a href="/admin/view-docs-details/{{id}}" style="color: white;">View Details</a></td>
+                            <td>
+                                {{#ifCondition listner_status '==' 1}}
+                                    <a href="#" class="action_btn accept-listner" data-id="{{id}}"><i class="fa fa-check"></i></a>
+                                    <a href="#" class="action_btn reject-listner" data-id="{{id}}"><i class="fa fa-xmark"></i></a>
+                                {{/ifCondition}}
+                                {{!-- <a href="#" class="action_btn delete-user" data-id="{{id}}"><i class="fa fa-trash-can"></i></a> --}}
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>        
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+    
+    $(document).on('click', '.delete-user', function(){
+        var userId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Delete User',
+            text: 'Are you sure you want to delete this user?', 
+            btnText: 'Yes, delete',
+            icon: 'warning'
+        };
+        var url = '/admin/users-management/delete-user/'+userId;
+        alertBox(alertData, url);
+    });
+
+    $(document).on('click', '.accept-listner', function(){
+        var userId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Accept listner request',
+            text: 'Are you sure you want to accept this listener request?', 
+            btnText: 'Yes, accept',
+            icon: 'info'
+        };
+        var url = '/admin/accept-account-request/'+userId;
+        alertBox(alertData, url);
+    });
+
+    $(document).on('click', '.reject-listner', function(){
+        var userId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Reject listner request',
+            text: 'Are you sure you want to reject this listener request?', 
+            btnText: 'Yes, reject',
+            icon: 'info'
+        };
+        var url = '/admin/reject-account-request/'+userId;
+        alertBox(alertData, url);
+    });
+</script>

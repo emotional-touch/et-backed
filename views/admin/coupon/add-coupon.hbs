@@ -1,0 +1,167 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="common_table">
+            <div class="user_detail_page">
+                <button class="back_btn"><a href="/admin/coupon-management/list"><i class="fa fa-arrow-left"></i></a>
+                 Create Coupon
+                </button>
+            </div>
+
+            <div class="addnew_user_form">
+                <form action="/admin/coupon-management/save" method="POST" class="common_form" id="add-coupon-form">
+                    <input type="hidden" name="couponId" {{#if couponInfo }} value="{{couponInfo.id}}" {{/if}}/>
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="couponname">Coupon Name</label>
+                                <input name="code" type="text" {{#if couponInfo }} value="{{couponInfo.code}}" {{/if}} class="form-control" id="couponname" aria-describedby="" placeholder="Enter Coupon Name">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <div class="form-group ">
+                                <label for="expiredate">Expiry Date</label>
+                                <input type="date" name="expiry_date" class="form-control date" id="expiredate" aria-describedby="" {{#if couponInfo }} value="{{formatTime couponInfo.expiry_date "Y-M-DD"}}" {{/if}} placeholder="Enter Expiry Date">
+                                {{!-- <i class="text-white fa fa-calendar-days"></i>     --}}
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-12">
+                            <div class="form-group">
+                                <label for="max-count">Max. Use Counts</label>
+                                <input type="number" name="user_limit" oninput="this.value=this.value.replace(/[^0-9]/g,'');" class="form-control" id="max-count" {{#if couponInfo }} value="{{couponInfo.user_limit}}" {{/if}} aria-describedby="" placeholder="Max Count">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-12" >
+                            <div class="form-group">
+                                <label for="onamount">Minimum Recharge Amount</label>
+                                <input type="text" name="min_amount" oninput="this.value=this.value.replace(/[^0-9]/g,'');" class="form-control"  {{#if couponInfo }} value="{{couponInfo.min_amount}}" {{/if}} aria-describedby="" placeholder="Enter Minimum Recharge Amount">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-12">
+                            <div class="form-group">
+                                <label for="type">Discount Type</label>
+                                <select name="type" id="type" class="form-control faq-cat">
+                                    <option value="">Select Type</option>
+                                    <option {{#if couponInfo }} {{isEqual couponInfo.type 'per'}} {{/if}} value="per">Percentage</option>
+                                    <option {{#if couponInfo }} {{isEqual couponInfo.type 'amount'}} {{/if}} value="amount">Amount</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-12 per_div" {{#if couponInfo }} {{#if (isEqual couponInfo.type 'amount')}} style="display:none;" {{/if}} {{else}} style="display:none;" {{/if}} >
+                            <div class="form-group">
+                                <label for="dis-off">% OFF</label>
+                                <input type="text" name="discount_per" oninput="this.value=this.value.replace(/[^0-9]/g,'');" class="form-control" id="disoff" {{#if couponInfo }} value="{{couponInfo.discount_per}}" {{/if}} aria-describedby="" placeholder="Discount">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-12 amt_div" {{#if couponInfo }} {{#if (isEqual couponInfo.type 'per')}} style="display:none;" {{/if}} {{else}} style="display:none;" {{/if}} >
+                            <div class="form-group">
+                                <label for="onamount">On Amount</label>
+                                <input type="text" name="discount_amount" oninput="this.value=this.value.replace(/[^0-9]/g,'');" class="form-control" id="onamount" {{#if couponInfo }} value="{{couponInfo.discount_amount}}" {{/if}} aria-describedby="" placeholder="Enter On Amount">
+                            </div>
+                        </div>
+                        {{!-- <div class="col-sm-12 col-12">
+                            <div class="form-group textarea">
+                                <label for="description">Description</label>
+                                <textarea class="form-control description" name="description" id="description" cols="30" rows="10" >{{#if couponInfo }} {{couponInfo.description}} {{/if}}</textarea>
+                            </div>
+                        </div> --}}
+                            
+                    </div>
+                    <button type="submit" class="btn custom_btn">Add</button>
+                </form>
+            </div>  
+        </div>
+        {{> footer-script }}
+    </div>
+</div>
+<script>
+    
+    $(document).ready(function() {
+        $('#add-coupon-form').validate({
+            rules: {
+                code: {
+                    required: true,
+                },
+                expiry_date: {
+                    required: true,
+                },
+                min_amount: {
+                    required: true,
+                },
+                user_limit: {
+                    required: true,
+                },
+                type: {
+                    required: true,
+                },
+                // discount_per: {
+                //     required: true,
+                // },
+                // discount_amount: {
+                //     required: true,
+                // },
+            },
+            messages: {
+                code: {
+                    required: 'Please enter code.',
+                },
+                expiry_date: {
+                    required: 'Please select expiry date.',
+                },
+                min_amount: {
+                    required: 'Please enter minimum recharge amount.',
+                },
+                user_limit: {
+                    required: 'Please enter user limit.',
+                },
+                type: {
+                    required: 'Please select type.',
+                },
+                // discount_per: {
+                //     required: 'Please enter discount per.',
+                // },
+                // discount_amount: {
+                //    required: 'Please enter discount amount.',
+                // },
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    });
+
+    $('.faq-cat').change(function(){
+        var type = $(this).val();
+        // alert(type);
+        if(type == 'per'){
+            $('.amt_div').hide();
+            $('.per_div').show();
+
+            $('#onamount').rules('remove', 'required');
+            $('#disoff').rules('add',{
+                required: true,
+                messages: {
+                    required: "Please enter discount percentage.",
+                },
+            });
+        }else{
+            $('.per_div').hide();
+            $('.amt_div').show();
+
+            $('#disoff').rules('remove', 'required');
+            $('#onamount').rules('add',{
+                required: true,
+                messages: {
+                    required: "Please enter discount amount.",
+                },
+            });
+        }
+    });
+
+</script>

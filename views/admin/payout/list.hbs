@@ -1,0 +1,148 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+         {{> admin-header }}
+        <!-- other content -->
+        <div class="usermgmt_detail_page common_table">
+            <table id="payout-management" class="display table custom_cmn_table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Sr. No</th>
+                        <th>Full Name</th>
+                        <th>Email Id</th>
+                        <th>UPI Id</th>
+                        <th>Payout Amount</th>
+                        <th>Net Payout Amount</th>
+                        <th>Leave Penalty</th>
+                        <th>Session Missed Penalty</th>
+                        <th style="width:200px;">Action</th>
+                    </tr>
+                </thead>
+            </table>        
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script>
+     var table = $('#payout-management').DataTable({
+        dom: 'Blfrtip',
+        buttons: [{
+            extend:'excelHtml5',
+            filename: 'payout',
+        }],
+        responsive: true,
+        serverSide: true,
+        processing: true,
+        ajax: {
+            url: '/admin/payout-management/get-payout-list',
+            type: 'GET',
+            data: function(d) {
+                d.page = Math.floor(d.start / d.length) + 1;
+                d.pageSize = d.length;
+                d.search = d.search || '';
+            },
+            dataSrc: function(json) {
+                    // Update the recordsTotal and recordsFiltered values
+                    table.page.info().recordsTotal = json.recordsTotal;
+                    table.page.info().recordsFiltered = json.recordsFiltered;
+                    return json.data;
+            }
+        },
+        columns: [
+          {data: null,
+            render: function(data, type, row, meta) {
+                // Calculate the correct index based on current page and page length
+                var index = meta.row + 1 + (meta.settings._iDisplayStart / meta.settings._iDisplayLength) * meta.settings._iDisplayLength;
+                return index;
+            }
+          },
+          { data: 'full_name' },
+          { data: 'email' },
+          { data: 'upi_id' , render: function (data, type, rowData, row) {
+                // Check if id is equal to 5
+                if (data != '' && data != null && data != undefined) {
+                    return data;
+                }else{
+                    return '---------';
+                }
+           }},
+          { data: 'payout_amount' },
+          { data: 'net_payout_amount' , render: function (data, type, rowData, row) {
+                // Check if id is equal to 5
+                if (data > 0) {
+                    return data;
+                }else{
+                    return '<span class="text-danger">'+data+'</span>';
+                }
+           }},
+          { data: 'leave_panelty_amt' },
+          { data: 'session_miss_panelty_amt' },
+          {
+                data: null,
+                render: function(data, type, rowData, row) {
+                    var actionHtml = "";
+
+                    if (rowData.net_payout_amount > 0) {
+                        actionHtml += '<a class="action_btn payout-money" data-id="' + rowData.id + '"><i class="fas fa-hand-holding-usd"></i></a>';
+                    }
+                    return actionHtml;
+                }
+            },
+        ],
+        language: {
+            searchPlaceholder: "Search",
+            search: ""
+        },
+        paging: true,
+        pageLength: 10 
+    });
+
+     $(document).on('click', '.payout-money', function(){
+         {{!-- Swal.fire({
+            title: 'Set balance zero rupees for this listner',
+            text: 'Are you sure you want to set balance zero rupees for this listner?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, set',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+               var walletId = $(this).attr('data-id');
+                $.ajax({
+                    url: '/admin/payout-management/payout',
+                    method: 'POST',
+                    data: {
+                    walletId:walletId,
+                    },
+                    success: function(response) {
+                    if(response.status == 'success'){
+                        var balanceTd = '#balance-td-'+walletId;
+                        $(balanceTd).text('');
+                        $(balanceTd).text(0);
+                        toastr.success(response.message);
+                    }else{
+                        toastr.error(response.message);
+                    }  
+                    
+                    },
+                    error: function() {
+                    toastr.error('Something went wrong.');
+                    }
+                });
+            }
+        });  --}}
+
+
+        var payoutId = $(this).attr('data-id');
+        var alertData = {
+            title: 'Payout amount to this listener',
+            text: 'Are you sure you want to payout amount to this listener?', 
+            btnText: 'Yes, payout',
+            icon: 'warning'
+        };
+        var url = '/admin/payout-management/payout/'+payoutId;
+        alertBox(alertData, url);
+    });
+
+</script>

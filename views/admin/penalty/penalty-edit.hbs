@@ -1,0 +1,69 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+        <div class="penalty_management_page common_table">
+           
+            <div class="view_review">
+                <ul class="nav nav-tabs" id="panalty-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="leave-penalty" data-bs-toggle="tab" data-bs-target="#panalty" type="button" role="tab" aria-controls="home" aria-selected="true">Leave Penalty</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="penalty-miss" data-bs-toggle="tab" data-bs-target="#missed-session" type="button" role="tab" aria-controls="profile" aria-selected="false">Missed Session Penalty</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="details_page addnew_user_form">
+                
+                <div class="tab-content" id="penalty-form">
+                    <div class="tab-pane fade show active" id="panalty" role="tabpanel" aria-labelledby="leave-penalty">
+                        <form action="/admin/penalty-management/save" method="POST" class="common_form" id="session-penalty-form">
+                            <input type="hidden" name="penaltyId" value="2"/>
+                            <div class="row">
+                                <div class="col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="numberleaves">Number of Leaves</label>
+                                        <input type="text" name="no" value="{{leaveInfo.no}}" class="form-control" oninput="this.value=this.value.replace(/[^0-9]/g,'');" id="numberleaves" aria-describedby="" placeholder="Enter Leaves">
+                                    </div>
+                                </div>
+                                 <div class="col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="leaveamout">Penalty per Leave Amount (Rs.)</label>
+                                        <input type="text" name="penalty_amount" class="form-control" value="{{leaveInfo.penalty_amount}}" oninput="this.value=this.value.replace(/[^0-9]/g,'');" id="leaveamout" aria-describedby="" placeholder="Enter Leave Amount">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn custom_btn">Save</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="missed-session" role="tabpanel" aria-labelledby="penalty-miss">
+                         <form action="/admin/penalty-management/save" method="POST" class="common_form"  id="leave-penalty-form">
+                            <input type="hidden" name="penaltyId" value="1"/>
+                            <div class="row">
+                                <div class="col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="numberleaves">Number of Missed Session Limit</label>
+                                        <input type="text" name="no" class="form-control" value="{{sessionInfo.no}}" oninput="this.value=this.value.replace(/[^0-9]/g,'');" id="session-limit" aria-describedby="" placeholder="Enter Session Limit">
+                                    </div>
+                                </div>
+                                 <div class="col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="sessionamout">Penalty per Missed Session Amount (Rs.)</label>
+                                        <input type="text" name="penalty_amount" class="form-control" value="{{sessionInfo.penalty_amount}}" oninput="this.value=this.value.replace(/[^0-9]/g,'');" id="sessionamout" aria-describedby="" placeholder="Enter Session Amount">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn custom_btn">Save</button>
+                        </form>
+                    </div>
+                </div>
+
+                
+            </div> 
+        </div>
+        {{> footer-script }}
+    </div>
+</div>

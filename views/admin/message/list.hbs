@@ -1,0 +1,288 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+         <div class="message_page common_table">
+            <div class="chat_filter">
+                <div class="common_form">
+                    <div class="chat_row">
+                        <div class="chat_col">
+                            <div class="from-group">
+                                <label for="selectuser">User <span class="text-danger">*</span></label>
+                                <select name="user" id="user" class="form-control faq-cat search-select">
+                                    <option value="">Select User</option>
+                                    {{#each userList}}
+                                    <option value="{{id}}">{{full_name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chat_col">
+                             <div class="from-group">
+                                <label for="selectlistener">Listener <span class="text-danger">*</span></label>
+                                <select name="listener" id="listener" class="form-control faq-cat search-select">
+                                    <option value="">Select Listener</option>
+                                    {{#each listenerList}}
+                                    <option value="{{id}}">{{full_name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chat_col">
+                            <div class="from-group">
+                                <label for="services">Services <span class="text-danger">*</span></label>
+                                <select name="service" id="service" class="form-control faq-cat">
+                                    <option value="">Select Service</option>
+                                    <option value="chat">Chat</option>
+                                    <option value="audio_call">Audio Call</option>
+                                    <option value="video_call">Video Call</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chat_col">
+                            <div class="select-date">
+                                <div class="form-group">
+                                    <label for="startdate">Start Date</label>
+                                    <input type="date" class="form-control date" name="startdate" id="startdate" aria-describedby="" placeholder="Start Date" onchange="updateEndDateMinDate()" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="enddate">End Date</label>
+                                    <input type="date" class="form-control date" name="enddate" id="enddate" aria-describedby="" placeholder="End Date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat_col">
+                        {{!-- <button type="button" class="btn custom_btn filter">Filter</button> --}}
+                        <div class="d-flex align-items-center h-100">
+                                <button type="button" class="btn add_user_btn filter"><i class="fa fa-search me-2"></i>Filter</button>
+                        </div>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{!-- <div class="add_user">
+                <a href="/admin/users-management/add" class="add_user_btn"><i class="fa fa-circle-plus"></i> Add New User</a>
+            </div> --}}
+            <section class="message-area">
+  
+                <div class="row">
+                <div class="col-12">
+                    <div class="chat-area">
+                    <div class="chatbox showbox">
+                        <div class="modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="msg-head">
+                                    {{!-- <div class="row">
+                                        <div class="col-md-8 col-12">
+                                            <div class="msg-profile">
+                                                <div class="user-profile">
+                                                    <div class="headprofile_img">
+                                                        <img class="pro-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbpF3IRjq3K2vF74PNI4mpc-kzYwXmegSupg&usqp=CAU" alt="">
+                                                    </div>
+                                                    <div class="user_names">
+                                                        <h3 class="pro-name">Mehedi Hasan</h3>
+                                                        <p class="position">User</p>
+                                                    </div>
+                                       
+                                                </div>
+                                                <div class="listner-profile">
+                                                    <div class="headprofile_img">
+                                                        <img class="pro-img" src="https://lh3.googleusercontent.com/7K5BkEX8HqQShfGMFH3NuzAgOgIxdzBASWwsBW1FenQPy1cW5alzsLtQirKzLC4ces7_1GXnMNeOso6RYz1-A8hWPXZismqXm0pMl7UWH1ObjQlsZQ=w1440-v1-e30" alt="">
+                                                    </div>
+                                                    <div class="user_names">
+                                                        <h3 class="pro-name">Jyoti Bhagvat</h3>
+                                                        <p class="position">Listener</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> --}}
+                                </div>
+                                <div class="modal-body">
+                                    <div class="msg-body">
+                                        <ul class="msg_data">
+                                            {{!-- <li class="sender">
+                                                <div class="chating">
+                                                    <img class="pro-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbpF3IRjq3K2vF74PNI4mpc-kzYwXmegSupg&usqp=CAU" alt="">
+                                                </div>
+                                                <div class="txt">
+                                                    <p> Hey, Are you there? Hey, Are you there?Hey, Are you there?Hey, Are you there? </p>
+                                                    <div class="other_data"> <span class="sendername"> Mahendi Hasan</span><span class="time">10:06 am</span></div>
+                                                </div>
+                                            </li>
+                                
+                                            <li class="repaly">
+                                                
+                                                <div class="txt">
+                                                    <p>How areHey, Are you there? you?</p>
+                                                    <div class="other_data"><span class="repliername">  Jyoti Bhagvat</span><span class="time">10:35 am</span></div>
+                                                </div>
+                                                <div class="chating">
+                                                    <img class="pro-img" src="https://lh3.googleusercontent.com/7K5BkEX8HqQShfGMFH3NuzAgOgIxdzBASWwsBW1FenQPy1cW5alzsLtQirKzLC4ces7_1GXnMNeOso6RYz1-A8hWPXZismqXm0pMl7UWH1ObjQlsZQ=w1440-v1-e30" alt="">
+                                                </div>
+                                            </li>
+                                            <li class="sender">
+                                                <div class="chating">
+                                                    <img class="pro-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbpF3IRjq3K2vF74PNI4mpc-kzYwXmegSupg&usqp=CAU" alt="">
+                                                </div>
+                                                <div class="txt">
+                                                    <p> Hey, Are you there? </p>
+                                                    <div class="other_data"> <span class="sendername"> Mahendi Hasan</span><span class="time">10:06 am</span></div>
+                                                </div>
+                                            </li>
+                                
+                                            <li class="repaly">
+                                                
+                                                <div class="txt">
+                                                    <p>How are you?</p>
+                                                    <div class="other_data"><span class="repliername"> Jyoti Bhagvat</span><span class="time">10:35 am</span></div>
+                                                </div>
+                                                <div class="chating">
+                                                    <img class="pro-img" src="https://lh3.googleusercontent.com/7K5BkEX8HqQShfGMFH3NuzAgOgIxdzBASWwsBW1FenQPy1cW5alzsLtQirKzLC4ces7_1GXnMNeOso6RYz1-A8hWPXZismqXm0pMl7UWH1ObjQlsZQ=w1440-v1-e30" alt="">
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="divider">
+                                                <h6>Today</h6>
+                                                </div>
+                                            </li>
+
+                                            <li class="sender">
+                                                <div class="chating">
+                                                    <img class="pro-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbpF3IRjq3K2vF74PNI4mpc-kzYwXmegSupg&usqp=CAU" alt="">
+                                                </div>
+                                                <div class="txt">
+                                                    <p> Hey, Are you there? </p>
+                                                    <div class="other_data"> <span class="sendername"> Mahendi Hasan</span><span class="time">10:06 am</span></div>
+                                                </div>
+                                            </li>
+                                
+                                            <li class="repaly">
+                                                
+                                                <div class="txt">
+                                                    <p>How are you?</p>
+                                                    <div class="other_data"><span class="repliername">  Jyoti Bhagvat</span><span class="time">10:35 am</span></div>
+                                                </div>
+                                                <div class="chating">
+                                                    <img class="pro-img" src="https://lh3.googleusercontent.com/7K5BkEX8HqQShfGMFH3NuzAgOgIxdzBASWwsBW1FenQPy1cW5alzsLtQirKzLC4ces7_1GXnMNeOso6RYz1-A8hWPXZismqXm0pMl7UWH1ObjQlsZQ=w1440-v1-e30" alt="">
+                                                </div>
+                                            </li> 
+                                            <li class="sender">
+                                                <div class="chating">
+                                                    <img class="pro-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbpF3IRjq3K2vF74PNI4mpc-kzYwXmegSupg&usqp=CAU" alt="">
+                                                </div>
+                                                <div class="txt">
+                                                    <p> Hey, Are you there? </p>
+                                                    <div class="other_data"> <span class="sendername"> Mahendi Hasan</span><span class="time">10:06 am</span></div>
+                                                </div>
+                                            </li>
+                                
+                                            <li class="repaly">
+                                                
+                                                <div class="txt">
+                                                    <p>How are you?</p>
+                                                    <div class="other_data"><span class="repliername"> Jyoti Bhagvat</span><span class="time">10:35 am</span></div>
+                                                </div>
+                                                <div class="chating">
+                                                    <img class="pro-img" src="https://lh3.googleusercontent.com/7K5BkEX8HqQShfGMFH3NuzAgOgIxdzBASWwsBW1FenQPy1cW5alzsLtQirKzLC4ces7_1GXnMNeOso6RYz1-A8hWPXZismqXm0pMl7UWH1ObjQlsZQ=w1440-v1-e30" alt="">
+                                                </div>
+                                            </li> --}}
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <!-- chatbox -->
+
+                </div>
+                </div>
+            
+            
+            </section>
+                 
+        </div>
+    </div>
+</div>
+{{> footer-script }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script>
+
+$(document).ready(function() {
+    $('.search-select').select2({
+      theme: 'bootstrap4',
+      width: 'style',
+      placeholder: $(this).attr('placeholder'),
+      allowClear: Boolean($(this).data('allow-clear')),
+      minimumInputLength: 0
+    });
+    $(".filter").click(function(){
+        var user = $('#user').val();
+        var listener = $('#listener').val();
+        var service = $('#service').val();
+        var startdate = $('#startdate').val();
+        var enddate = $('#enddate').val();
+
+        if(user != '' && listener != '' && service != ''){
+            $.ajax({
+                url: '/admin/message-management/user-details',
+                method: 'POST',
+                data: {
+                user:user,
+                listener:listener,
+                },
+                success: function(response) {
+                if(response.status == 'success'){
+                    $('.msg-head').html(response.data);
+                    $('.msg_data').html('');
+                        $.ajax({
+                            url: '/admin/message-management/filter',
+                            method: 'POST',
+                            data: {
+                            user:user,
+                            listener:listener,
+                            service:service,
+                            startdate:startdate,
+                            enddate:enddate,
+                            },
+                            success: function(response) {
+                            if(response.status == 'success'){
+                                    // toastr.success(response.message);
+                                    $('.msg_data').html(response.data);
+                            }else{
+                                    toastr.error(response.message);
+                            }  
+                            
+                            },
+                            error: function() {
+                            toastr.error('Something went wrong.');
+                            }
+                        });
+                }else{
+                        toastr.error(response.message);
+                }  
+                
+                },
+                error: function() {
+                toastr.error('Something went wrong.');
+                }
+            });
+
+        }else{
+            toastr.error('please select user, listener and chat filters.');
+        }
+    });
+
+});
+
+function updateEndDateMinDate() {
+
+    var startDate = document.getElementById("startdate").value;
+    document.getElementById("enddate").min = startDate;
+}
+</script>

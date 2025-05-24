@@ -1,0 +1,78 @@
+{{!< main}}
+<div class="main_layout">
+    {{> admin-sidebar }}
+    <div class="content">   
+        {{> admin-header }}
+        <!-- other content -->
+         <div class="query_management_page common_table view_review">
+
+                <ul class="nav nav-tabs" id="review-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="given-review" data-bs-toggle="tab" data-bs-target="#given" type="button" role="tab" aria-controls="home" aria-selected="true">Listener</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#received" type="button" role="tab" aria-controls="profile" aria-selected="false">User</button>
+                    </li>
+                </ul>
+                <div class="tab-content query-mgmt-tb" id="query-mgmt">
+                    <div class="tab-pane fade show active" id="given" role="tabpanel" aria-labelledby="given-review">
+                      
+                         <table id="query-management" class="display table cmn_table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Query</th>
+                                    <th>Submitted By</th>
+                                    <th>Submitted On</th>
+                                    <th style="width:150px;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each queryListenerList}}
+                                <tr>
+                                    <td>{{query}}</td>
+                                    <td>{{submitted_by_name}}</td>
+                                    <td>{{formatTime created_at "DD MMM,Y"}}</td>
+                                    <td>
+                                        <a href="/admin/query-management/details/{{id}}" class="action_btn"><i class="fa fa-eye"></i></a>
+                                        {{#if (isEqual status '0')}}
+                                        <a href="/admin/query-management/reply/{{id}}" class="action_btn"><i class="fa fa-reply"></i></a>
+                                        {{/if}}
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                   </div>
+                    <div class="tab-pane fade" id="received" role="tabpanel" aria-labelledby="profile-tab">
+                         <table id="query-management" class="display table cmn_table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Query</th>
+                                    <th>Submitted By</th>
+                                    <th>Submitted On</th>
+                                    <th style="width:150px;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each queryUserList}}
+                                <tr>
+                                    <td>{{query}}</td>
+                                    <td>{{submitted_by_name}}</td>
+                                    <td>{{formatTime created_at "DD MMM,Y"}}</td>
+                                    <td>
+                                        <a href="/admin/query-management/details/{{id}}" class="action_btn"><i class="fa fa-eye"></i></a>
+                                        {{#if (isEqual status '0')}}
+                                        <a href="/admin/query-management/reply/{{id}}" class="action_btn"><i class="fa fa-reply"></i></a>
+                                        {{/if}}
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                   
+        </div>
+    </div>
+</div>
+{{> footer-script }}

@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      /* Add your styles here */
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+       <input id="msg" placeholder="message" autocomplete="off" />
+      <input id="m" placeholder="sender id" value="244" autocomplete="off" />
+       <input id="n" placeholder="receiver id" value="243" autocomplete="off" />
+        <input id="req" placeholder="request id" value="964" autocomplete="off" /><button>Send</button>
+    </form>
+   <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+      $(function () {
+        var socket = io();
+        var keyId = parseInt($('#m').val());
+          //console.log(keyId);
+        $('form').submit(function(e){
+          e.preventDefault(); // prevents page reloading
+          var toId = $('#n').val();
+          var message = $('#msg').val();
+          var reqId = $('#req').val();
+          //var chatList = socket.emit('chatList', { userId: keyId, keyword: '', userType: 'listner', chatListType: 'other' }); // inbox,  other
+          //var chatMessage = socket.emit('getChatMessage', { fromId: keyId, toId: toId});
+          //var readStatus = socket.emit('readStatusUpdate', { fromId: keyId, toId: toId}); 
+          var socketConnect = socket.emit('socketConnect', { userId: keyId }); 
+          //console.log(socketConnect);
+         //var socketDisconnect = socket.emit('disconnect_socket', {userId: keyId}); 
+
+         /*var sendFreeMessage = socket.emit('sendFreeMessage', { 
+              fromId: keyId,
+              toId: toId,
+              message: message,
+          });*/
+
+         /*var sendServiceRequest = socket.emit('sendServiceRequest', { 
+              fromId: keyId,
+              toId: toId,
+              serviceType: 'chat',
+              message: message,
+              roomName: 'TEST123_215333'
+          });
+          //console.log(sendServiceRequest);*/
+          /*var actionServiceRequest = socket.emit('actionServiceRequest', { 
+              fromId: keyId,
+              toId: toId,
+              requestId: reqId,
+              requestStatus: 'completed'
+          });*/
+        
+          var sendChatMessage = socket.emit('sendChatMessage', { 
+                fromId: keyId,
+                toId: toId,
+                type: 2,
+                message: message
+            });
+        });
+
+        /*socket.on('getOnlineOflineStatusResponse_'+keyId, (response) => {
+        // Handle the response from the server
+            //console.log('Server Online Ofline Status response:', response);
+        });*/
+
+        /*var freeMsgResponce = 'getFreeMessageResponse_'+keyId;
+        socket.on(freeMsgResponce, (response) => {
+            //console.log(response);
+        });*/
+
+        //var tersft= 'actionServiceRequestResponse_'+keyId;
+       /* socket.on(tersft, (response) => {
+            //console.log(response);
+        });*/
+
+        // Listen for 'chatListResponse' events from the server
+        /*socket.on('chatListResponse', (response) => {
+        // Handle the response from the server
+            //console.log('Server Chat List response:', response);
+        });*/
+  
+        // Listen for 'getChatMessageResponse' events from the server
+        /*socket.on('getChatMessageResponse', (response) => {
+        // Handle the response from the server
+            //console.log('Server Chat Message response:', response);
+        });*/
+
+         // Listen for 'sendChatMessageResponse' events from the server
+        /*socket.on('sendChatMessageResponse', (response) => {
+          // Handle errors from the server
+          $('#messages').append('<span style="color:red;">'+response.message+'</span>');
+          //console.log('Server Send Chat Message response:', response);
+        });*/
+        /*socket.on('sendChatMessageResponse_'+keyId, (response) => {
+          // Handle errors from the server
+          $('#messages').append('<span style="color:red;">'+response.message+'</span>');
+          //console.log('Server Send Chat Message response:', response);
+        });*/
+/*
+         var funnamez= 'chatListRefresh_'+keyId;
+          socket.on(funnamez, () => {
+            socket.emit('chatList', { userId: keyId, keyword: '', userType: 'listner', chatListType: 'other' }); // inbox,  other
+          }); */
+
+      var funnamez= 'sendServiceRequestResponse_'+keyId;
+        socket.on(funnamez, (response) => {
+            //console.log(response);
+        });
+
+        /***
+        // Listen for 'chatListError' events from the server
+        socket.on('chatListError', (error) => {
+          // Handle errors from the server
+          console.error('Server Chat List error:', error);
+        });
+
+        // Listen for 'getChatMessageError' events from the server
+        socket.on('getChatMessageError', (error) => {
+          // Handle errors from the server
+          console.error('Server Chat Message error:', error);
+        });
+
+         // Listen for 'sendChatMessageError' events from the server
+        socket.on('sendChatMessageError', (error) => {
+          // Handle errors from the server
+          console.error('Server Send Chat Message error:', error);
+        });
+        ***/
+      });
+    </script>
+  </body>
+</html>

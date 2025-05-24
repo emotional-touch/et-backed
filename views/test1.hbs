@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      /* Add your styles here */
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+       <input id="msg" placeholder="message" autocomplete="off" />
+      <input id="m" placeholder="sender id" value="{{fromId}}" autocomplete="off" />
+       <input id="n" placeholder="receiver id" autocomplete="off" /><button>Send</button>
+    </form>
+   <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+    $(function () {
+        var socket = io();
+        var keyId = parseInt($('#m').val());
+        $('form').submit(function(e){
+          e.preventDefault(); // prevents page reloading
+          var toId = $('#n').val();
+          var message = $('#msg').val();
+          //var messageAction = socket.emit('sendMessageAction', { messageId: 1, fromId:keyId , toId: toId, reactionStatus: 'like' }); 
+          //var logout = socket.emit('logout', { userId: keyId }); 
+          //var socketPing = socket.emit('socketPing'); 
+          var socketConnect = socket.emit('socketConnect', { userId: keyId }); 
+          //var chatList = socket.emit('chatList', { userId: keyId, keyword: '', userType: 'listner', chatListType: 'other' }); // inbox,  other
+
+          /*var sendFreeMessage = socket.emit('sendFreeMessage', { 
+              fromId: keyId,
+              toId: toId,
+              message: message,
+          });
+          
+          var socketConnect = socket.emit('getLogMessage', { 
+              fromId: keyId, 
+              toId: toId
+          });*/
+           
+          /*var sendServiceRequest = socket.emit('sendServiceRequest', { 
+              fromId: keyId,
+              toId: toId,
+              serviceType: 'call',
+              message: message,
+              roomName: 'TEST123_215'
+          });
+
+          var actionServiceRequest = socket.emit('actionServiceRequest', { 
+              fromId: toId,
+              toId: keyId,
+              requestId: 3278,
+              requestStatus: 'completed'
+          });*/
+
+          //var socketConnect = socket.emit('getOnlineOflineStatus', { 
+             //userId:3
+          //});
+
+          /*var sdsdsads = socket.emit('updateServiceToggleInfo', {
+              userId: keyId, 
+              serviceToggleStatus: 0, 
+              service: 'vcall,call,chat'
+          });*/
+          
+        });
+
+        /*var freeMsgResponce = 'getFreeMessageResponse_'+keyId;
+        socket.on(freeMsgResponce, (response) => {
+            //console.log(response);
+        });*/
+
+       /*var funnamez= 'sendServiceRequestResponse_'+keyId;
+        socket.on(funnamez, (response) => {
+            //console.log(response);
+        });*/
+
+        /*var tersft= 'actionServiceRequestResponse_'+keyId;
+        socket.on(tersft, (response) => {
+            //console.log(response);
+        }); 
+
+        socket.on('getLogMessageResponse', (response) => {
+        // Handle the response from the server
+            //console.log('Server Log Message response:', response);
+        });
+        */
+
+        /*socket.on('getOnlineOflineStatusResponse_'+3, (response) => {
+        // Handle the response from the server
+            //console.log('Server Online Ofline Status response:', response);
+        });*/
+
+        /*socket.on('getMessageActionResponse_'+keyId, (response) => {
+        // Handle the response from the server
+            //console.log('message action response:', response);
+        });*/
+        
+
+        /*var funnamez= 'chatListRefresh_'+keyId;
+        //console.log(funnamez);
+        socket.on(funnamez, () => {
+          socket.emit('chatList', { userId: keyId, keyword: '', userType: 'listner', chatListType: 'other' }); // inbox,  other
+        }); */
+
+          // Listen for 'chatListResponse' events from the server
+        /*socket.on('chatListResponse', (response) => {
+        // Handle the response from the server
+            //console.log('Server Chat List response:', response);
+        });*/
+
+    });
+    </script>
+  </body>
+</html>
